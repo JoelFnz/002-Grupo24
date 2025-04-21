@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="datos.Ticket" table="ticket">
+		<id column="idTicket" name="idTicket">
+			<generator class="identity" />
+		</id>
+		<property column="titulo" name="titulo" type="string" />
+		<property column="descripcion" name="descripcion" type="string" />
+		<property column="motivo" name="motivo" type="string" />
+		<property column="fechaDeCreacion" name="fechaDeCreacion" type="LocalDateTime" />
+		
+		<!-- Relaciones con otras clases -->
+		<one-to-one name="estado" class="datos.Estado" ></one-to-one>
+		
+		<many-to-one name="usuario" class="datos.UsuarioFinal" column="idUsuario"
+ 			not-null="true"/>
+ 			
+ 		<set table="TicketTieneEmpleado" name="empleadoAsignado" outer-join="true">
+			<key column="idTicket"/>
+			<many-to-many column="idUsuario" class="datos.Empleado"/>
+		</set>
+		
+		
+	</class>
+</hibernate-mapping>

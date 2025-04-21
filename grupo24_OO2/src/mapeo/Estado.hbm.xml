@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="datos.Estado" table="estado">
+		<id column="idEstado" name="idEstado">
+			<generator class="foreign">
+				<param name="property">ticket</param>
+			</generator>
+		</id>
+		
+		<property name="ultimoCambioEstado" column="ultimoCambioEstado" type="LocalDateTime"/>
+		<property name="descripcionDelEstado" column="descripcionDelEstado" type="string"/>
+		
+		<!-- Esto es un enum tanto en BD como en la clase -->
+		<property name="tipoDeEstado" column="tipoDeEstado" type="string"/>
+		
+		<!-- Relaciones con otras clases -->
+		<one-to-one name="ticket" class="datos.Ticket" ></one-to-one>
+	</class>
+</hibernate-mapping>

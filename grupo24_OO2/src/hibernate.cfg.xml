@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	 <session-factory>
+		 <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		 
+		 <!-- Si tienen otro puerto para el localhost de MySQL cambien esto -->
+		 <property name="connection.url">jdbc:mysql://localhost:3306/grupo24_oo2?serverTimezone=GMT-3</property>
+		 
+		 <!-- Acá cambien sus credenciales de acuerdo a cómo tengan configurado MySQL -->
+		 <property name="connection.username">root</property>
+		 <property name="connection.password">root</property>
+		 
+		 <property name="connection.pool_size">1</property>
+		 <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		 <property name="show_sql">false</property><!-- en true muestra hql en consola-->
+		 
+		 <!-- Mapeo Entidades-->
+		 <mapping resource="mapeo/Usuario.hbm.xml" />
+		 <mapping resource="mapeo/Contacto.hbm.xml" />
+		 <mapping resource="mapeo/Ticket.hbm.xml" />
+		 <mapping resource="mapeo/Estado.hbm.xml" />
+		 
+	</session-factory>
+</hibernate-configuration>
