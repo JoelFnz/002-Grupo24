@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 public class Estado {
 	private long idEstado;
 	private Ticket ticket;
-	private TipoDeEstado tipoDeEstado;
+	private String tipoDeEstado;
 	private String descripcionDelEstado;
 	private LocalDateTime ultimoCambioEstado;
 	
 	public Estado() {}
 
-	public Estado(TipoDeEstado tipoDeEstado, String descripcionDelEstado, LocalDateTime ultimoCambioEstado, Ticket ticket) {
+	public Estado(String tipoDeEstado, String descripcionDelEstado, LocalDateTime ultimoCambioEstado, Ticket ticket) {
 		super();
 		this.tipoDeEstado = tipoDeEstado;
 		this.descripcionDelEstado = descripcionDelEstado;
@@ -27,11 +27,11 @@ public class Estado {
 		this.idEstado = idEstado;
 	}
 
-	public TipoDeEstado getTipoDeEstado() {
+	public String getTipoDeEstado() {
 		return tipoDeEstado;
 	}
 
-	public void setTipoDeEstado(TipoDeEstado tipoDeEstado) {
+	public void setTipoDeEstado(String tipoDeEstado) {
 		this.tipoDeEstado = tipoDeEstado;
 	}
 
@@ -58,6 +58,11 @@ public class Estado {
 	public void setTicket(Ticket ticket) {
 		this.ticket = ticket;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Estado [idEstado=" + idEstado + ", tipoDeEstado=" + tipoDeEstado + ", descripcionDelEstado="
+				+ descripcionDelEstado + ", ultimoCambioEstado=" + ultimoCambioEstado + "]";
+	}
 	
 }

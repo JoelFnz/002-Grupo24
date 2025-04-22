@@ -113,9 +113,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`TicketTieneEmpleado` (
   `idTicket` INT NOT NULL,
-  `idEmpleado` INT NOT NULL,
-  PRIMARY KEY (`idTicket`, `idEmpleado`),
-  INDEX `fk_Ticket_has_Empleado_Empleado1_idx` (`idEmpleado` ASC) VISIBLE,
+  `idUsuario` INT NOT NULL,
+  PRIMARY KEY (`idTicket`, `idUsuario`),
+  INDEX `fk_Ticket_has_Empleado_Empleado1_idx` (`idUsuario` ASC) VISIBLE,
   INDEX `fk_Ticket_has_Empleado_Ticket1_idx` (`idTicket` ASC) VISIBLE,
   CONSTRAINT `fk_Ticket_has_Empleado_Ticket1`
     FOREIGN KEY (`idTicket`)
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`TicketTieneEmpleado` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Ticket_has_Empleado_Empleado1`
-    FOREIGN KEY (`idEmpleado`)
+    FOREIGN KEY (`idUsuario`)
     REFERENCES `Grupo24_OO2`.`Empleado` (`idEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

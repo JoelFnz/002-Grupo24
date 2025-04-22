@@ -1,6 +1,9 @@
 package dao;
 
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -64,6 +67,8 @@ public class UsuarioDao {
 		try {
 			iniciaOperacion();
 			objeto = session.get(Usuario.class, idUsuario);
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
 		} finally {
 			session.close();
 		}
@@ -77,6 +82,8 @@ public class UsuarioDao {
 			Query<Usuario> query = session.createQuery("from Usuario u where u.dni = :dni", Usuario.class);
 			query.setParameter("dni", dni);
 			objeto = query.uniqueResult();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
 		} finally {
 			session.close();
 		}
@@ -88,6 +95,9 @@ public class UsuarioDao {
 		try {
 			iniciaOperacion();
 			lista = session.createQuery("from Usuario", Usuario.class).getResultList();
+			
+		} catch (HibernateException he) {
+			manejaExcepcion(he); 
 		} finally {
 			session.close();
 		}
@@ -99,6 +109,8 @@ public class UsuarioDao {
 		try {
 			iniciaOperacion();
 			lista = session.createQuery("from Usuario u where u.baja = false", Usuario.class).getResultList();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
 		} finally {
 			session.close();
 		}
@@ -112,6 +124,8 @@ public class UsuarioDao {
 			String hql = "from " + tipoClase.getSimpleName() + " u where u.baja = false";
 			Query<Usuario> query = session.createQuery(hql, Usuario.class);
 			lista = query.getResultList();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
 		} finally {
 			session.close();
 		}

@@ -15,10 +15,10 @@
 		<!-- Relaciones con otras clases -->
 		<one-to-one name="estado" class="datos.Estado" ></one-to-one>
 		
-		<many-to-one name="usuario" class="datos.UsuarioFinal" column="idUsuario"
+		<many-to-one name="usuario" class="datos.UsuarioFinal" column="usuarioFinal"
  			not-null="true"/>
  			
- 		<set table="TicketTieneEmpleado" name="empleadoAsignado" outer-join="true">
+ 		<set table="tickettieneempleado" name="empleadoAsignado" outer-join="true">
 			<key column="idTicket"/>
 			<many-to-many column="idUsuario" class="datos.Empleado"/>
 		</set>

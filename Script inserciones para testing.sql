@@ -108,7 +108,7 @@ SELECT * FROM ticket;
 INSERT INTO
 TicketTieneEmpleado(
 	idTicket,
-    idEmpleado
+    idUsuario
 ) VALUES (
 	1,
     1
