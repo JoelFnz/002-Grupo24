@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Contacto` (
   INDEX `fk_Contacto_Usuario_idx` (`idContacto` ASC) VISIBLE,
   CONSTRAINT `fk_Contacto_Usuario`
     FOREIGN KEY (`idContacto`)
-    REFERENCES `mydb`.`Usuario` (`idUsuario`)
+    REFERENCES `Grupo24_OO2`.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Empleado` (
   INDEX `fk_Empleado_Usuario1_idx` (`idEmpleado` ASC) VISIBLE,
   CONSTRAINT `fk_Empleado_Usuario1`
     FOREIGN KEY (`idEmpleado`)
-    REFERENCES `mydb`.`Usuario` (`idUsuario`)
+    REFERENCES `Grupo24_OO2`.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`UsuarioFinal` (
   PRIMARY KEY (`idUsuarioFinal`),
   CONSTRAINT `fk_UsuarioFinal_Usuario1`
     FOREIGN KEY (`idUsuarioFinal`)
-    REFERENCES `mydb`.`Usuario` (`idUsuario`)
+    REFERENCES `Grupo24_OO2`.`Usuario` (`idUsuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -77,7 +77,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Ticket` (
   `idTicket` INT NOT NULL AUTO_INCREMENT,
   `titulo` VARCHAR(45) NOT NULL,
-  `descripcion` VARCHAR(45) NOT NULL,
+  `descripcion` VARCHAR(300) NOT NULL,
   `motivo` VARCHAR(45) NOT NULL,
   `fechaDeCreacion` DATE NOT NULL,
   `usuarioFinal` INT NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Ticket` (
   INDEX `fk_Ticket_UsuarioFinal1_idx` (`usuarioFinal` ASC) VISIBLE,
   CONSTRAINT `fk_Ticket_UsuarioFinal1`
     FOREIGN KEY (`usuarioFinal`)
-    REFERENCES `mydb`.`UsuarioFinal` (`idUsuarioFinal`)
+    REFERENCES `Grupo24_OO2`.`UsuarioFinal` (`idUsuarioFinal`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -97,12 +97,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Estado` (
   `idEstado` INT NOT NULL,
   `tipoDeEstado` ENUM('enviado', 'recibido', 'finalizado') NOT NULL DEFAULT 'enviado',
-  `descripcionDelEstado` VARCHAR(200) NOT NULL,
+  `descripcionDelEstado` VARCHAR(300) NOT NULL,
   `ultimoCambioEstado` DATETIME NOT NULL,
   PRIMARY KEY (`idEstado`),
   CONSTRAINT `fk_Estado_Ticket1`
     FOREIGN KEY (`idEstado`)
-    REFERENCES `mydb`.`Ticket` (`idTicket`)
+    REFERENCES `Grupo24_OO2`.`Ticket` (`idTicket`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -119,12 +119,12 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`TicketTieneEmpleado` (
   INDEX `fk_Ticket_has_Empleado_Ticket1_idx` (`idTicket` ASC) VISIBLE,
   CONSTRAINT `fk_Ticket_has_Empleado_Ticket1`
     FOREIGN KEY (`idTicket`)
-    REFERENCES `mydb`.`Ticket` (`idTicket`)
+    REFERENCES `Grupo24_OO2`.`Ticket` (`idTicket`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Ticket_has_Empleado_Empleado1`
     FOREIGN KEY (`idEmpleado`)
-    REFERENCES `mydb`.`Empleado` (`idEmpleado`)
+    REFERENCES `Grupo24_OO2`.`Empleado` (`idEmpleado`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
