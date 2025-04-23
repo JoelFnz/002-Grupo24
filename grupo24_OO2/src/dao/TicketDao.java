@@ -1,5 +1,6 @@
 package dao;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -7,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import datos.Ticket;
+import datos.UsuarioFinal;
 
 public class TicketDao {
 	private static Session session;
@@ -82,4 +84,36 @@ public class TicketDao {
 		}
 		return lista;
 	}
+	
+	public List<Ticket> traerDesde(UsuarioFinal usuarioFinal, LocalDateTime desdeCreacion){
+		List<Ticket> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Ticket> query = session.createQuery("from Ticket t where usuarioFinal = :usuario and"
+					+ " fechaDeCreacion >= :fecha", Ticket.class);
+			query.setParameter("usuario", usuarioFinal.getIdUsuario());
+			query.setParameter("fecha", desdeCreacion);
+			lista = query.getResultList();
+		} finally {
+			session.close();
+		}
+		return lista;
+	}
+	
+	public List<Ticket> traerHasta(UsuarioFinal usuarioFinal, LocalDateTime hastaCreacion){
+		List<Ticket> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Ticket> query = session.createQuery("from Ticket t where usuarioFinal = :usuario and"
+					+ " fechaDeCreacion < :fecha", Ticket.class);
+			query.setParameter("usuario", usuarioFinal.getIdUsuario());
+			query.setParameter("fecha", hastaCreacion);
+			lista = query.getResultList();
+		} finally {
+			session.close();
+		}
+		return lista;
+	}
+	
+	
 }

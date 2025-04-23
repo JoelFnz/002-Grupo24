@@ -1,8 +1,11 @@
 package negocio;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import dao.TicketDao;
 import datos.Ticket;
+import datos.UsuarioFinal;
 
 public class TicketABM {
 	private TicketDao dao = new TicketDao();
@@ -32,5 +35,13 @@ public class TicketABM {
 		Ticket t = dao.traer(idTicket);
 		if (t == null) throw new Exception("No existe el ticket con id = " + idTicket);
 		dao.eliminar(t);
+	}
+	
+	public List<Ticket> traerPorUsuarioYDesdeCreacion(UsuarioFinal usuarioFinal, LocalDateTime desdeCreacion){
+		return dao.traerDesde(usuarioFinal, desdeCreacion);
+	}
+	
+	public List<Ticket> traerPorUsuarioYHastaCreacion(UsuarioFinal usuarioFinal, LocalDateTime hastaCreacion){
+		return dao.traerHasta(usuarioFinal, hastaCreacion);
 	}
 }
