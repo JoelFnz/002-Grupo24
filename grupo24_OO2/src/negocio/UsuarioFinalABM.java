@@ -2,6 +2,7 @@ package negocio;
 
 import java.util.List;
 import dao.UsuarioFinalDao;
+import datos.Ticket;
 import datos.UsuarioFinal;
 
 public class UsuarioFinalABM {
@@ -51,6 +52,10 @@ public class UsuarioFinalABM {
 			usuario.setBaja(true);
 			dao.actualizar(usuario);
 		}
+	}
+	
+	public UsuarioFinal traer(Ticket ticket) {
+		return dao.traerPorTicket(ticket);
 	}
 
 }

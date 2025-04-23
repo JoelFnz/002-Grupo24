@@ -1,5 +1,6 @@
 package dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -7,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import datos.Empleado;
+import datos.Ticket;
 
 public class EmpleadoDao {
     private static Session session;
@@ -94,5 +96,84 @@ public class EmpleadoDao {
             session.close();
         }
         return lista;
+    }
+    
+    public List<Empleado> traerPorFechaDeIngreso(LocalDate fechaDeIngreso){
+    	List<Empleado> lista = null;
+    	try {
+    		iniciaOperacion();
+    		Query<Empleado> query = session.createQuery("from Empleado e where e.fechaDeIngreso = :fecha",
+    				Empleado.class);
+    		query.setParameter("fecha", fechaDeIngreso);
+    		lista = query.getResultList();
+    	} catch(HibernateException he) {
+    		manejaExcepcion(he);
+    	} finally {
+    		session.close();
+    	}
+    	return lista;
+    }
+    
+    public List<Empleado> traerPorIntervaloDeIngreso(LocalDate desde, LocalDate hasta){
+    	List<Empleado> lista = null;
+    	try {
+    		iniciaOperacion();
+    		Query<Empleado> query = session.createQuery("from Empleado e where e.fechaDeIngreso < :hasta and"
+    				+ " e.fechaDeIngreso >= :desde", Empleado.class);
+    		query.setParameter("hasta", hasta);
+    		query.setParameter("desde", desde);
+    		lista = query.getResultList();
+    	} catch(HibernateException he) {
+    		manejaExcepcion(he);
+    	} finally {
+    		session.close();
+    	}
+    	return lista;
+    }
+    
+    public List<Empleado> traerPorTicketAsociado(Ticket ticketAsociado){
+    	List<Empleado> lista = null;
+    	try {
+    		iniciaOperacion();
+    		Query<Empleado> query = session.createQuery("select e from Empleado e "
+    				+ "join e.ticketAsignado ta where ta.idTicket = :ticket", Empleado.class);
+    		query.setParameter("ticket", ticketAsociado.getIdTicket());
+    		lista = query.getResultList();
+    	} catch(HibernateException he) {
+    		manejaExcepcion(he);
+    	} finally {
+    		session.close();
+    	}
+    	return lista;
+    }
+    
+    public List<Empleado> traerDesdeFechaDeIngreso(LocalDate desde){
+    	List<Empleado> lista = null;
+    	try {
+    		iniciaOperacion();
+    		Query<Empleado> query = session.createQuery("from Empleado e where e.fechaDeIngreso >= :desde", Empleado.class);
+    		query.setParameter("desde", desde);
+    		lista = query.getResultList();
+    	} catch(HibernateException he) {
+    		manejaExcepcion(he);
+    	} finally {
+    		session.close();
+    	}
+    	return lista;
+    }
+    
+    public List<Empleado> traerhastaFechaDeIngreso(LocalDate hasta){
+    	List<Empleado> lista = null;
+    	try {
+    		iniciaOperacion();
+    		Query<Empleado> query = session.createQuery("from Empleado e where e.fechaDeIngreso < :hasta", Empleado.class);
+    		query.setParameter("hasta", hasta);
+    		lista = query.getResultList();
+    	} catch(HibernateException he) {
+    		manejaExcepcion(he);
+    	} finally {
+    		session.close();
+    	}
+    	return lista;
     }
 }

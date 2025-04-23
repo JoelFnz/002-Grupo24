@@ -1,5 +1,6 @@
 package dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -89,6 +90,39 @@ public class UsuarioDao {
 		}
 		return objeto;
 	}
+	
+	public List<Usuario> traerPorIntervaloDeNacimiento(LocalDate desde, LocalDate hasta){
+		List<Usuario> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Usuario> query = session.createQuery("from Usuario u where u.fechaDeNacimiento < :hasta "
+					+ "and u.fechaDeNacimiento >= :desde", Usuario.class);
+			query.setParameter("hasta", hasta);
+			query.setParameter("desde", desde);
+			lista = query.getResultList();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
+		} finally {
+			session.close();
+		}
+		return lista;
+	}
+	
+	public List<Usuario> traerPorNacimiento(LocalDate fechaDeNacimiento){
+		List<Usuario> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Usuario> query = session.createQuery("from Usuario u where u.fechaDeNacimiento = :fecha ",
+					Usuario.class);
+			query.setParameter("fecha", fechaDeNacimiento);
+			lista = query.getResultList();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
+		} finally {
+			session.close();
+		}
+		return lista;
+	}
 
 	public List<Usuario> traer() {
 		List<Usuario> lista = null;
@@ -131,5 +165,38 @@ public class UsuarioDao {
 		}
 		return lista;
 	}
+	
+	public List<Usuario> traerPorNombre(String nombre){
+		List<Usuario> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Usuario> query = session.createQuery("from Usuario u Where u.nombre = :nombre",
+					Usuario.class);
+			query.setParameter("nombre", nombre);
+			lista = query.getResultList();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
+		} finally {
+			session.close();
+		}
+		return lista;
+	}
 
+	public List<Usuario> traerPorApellido(String apellido){
+		List<Usuario> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Usuario> query = session.createQuery("from Usuario u Where u.apellido = :apellido",
+					Usuario.class);
+			query.setParameter("apellido", apellido);
+			lista = query.getResultList();
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
+		} finally {
+			session.close();
+		}
+		return lista;
+	}
+
+	
 }

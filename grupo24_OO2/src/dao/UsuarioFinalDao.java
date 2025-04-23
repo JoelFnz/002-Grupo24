@@ -6,6 +6,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import datos.Ticket;
 import datos.UsuarioFinal;
 
 public class UsuarioFinalDao {
@@ -115,5 +117,21 @@ public class UsuarioFinalDao {
             session.close();
         }
         return lista;
+    }
+    
+    public UsuarioFinal traerPorTicket(Ticket ticket) {
+    	UsuarioFinal retorno = null;
+        try {
+            iniciaOperacion();
+            Query<UsuarioFinal> query = session.createQuery(
+                "select u from UsuarioFinal u join u.lstTickets t where t.idTicket = :ticket",
+                UsuarioFinal.class
+            );
+            query.setParameter("ticket", ticket.getIdTicket());
+            retorno = query.uniqueResult();
+        } finally {
+            session.close();
+        }
+        return retorno;
     }
 }
