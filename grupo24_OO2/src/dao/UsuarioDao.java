@@ -236,5 +236,22 @@ public class UsuarioDao {
 	    return objeto;
 	}
 
+	public Usuario traerPorEmail(String email) {
+		Usuario usuario = null;
+		
+		try {
+			iniciaOperacion();
+			Query<Usuario> query = session.createQuery("Select u from Usuario u join u.contacto c where"
+					+ " c.email = :email", Usuario.class);
+			query.setParameter("email", email);
+			usuario = query.uniqueResult();
+		} catch(HibernateException he) {
+			manejaExcepcion(he);
+		} finally {
+			session.close();
+		}
+		
+		return usuario;
+	}
 	
 }

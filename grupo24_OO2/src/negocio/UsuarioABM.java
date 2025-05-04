@@ -95,4 +95,26 @@ public class UsuarioABM {
 			throw new Exception("Error en capa negocio. La fecha 'desde' debe ser anterior a la fecha 'hasta'");
 		return dao.traerPorIntervaloDeNacimiento(desde, hasta);
 	}
+	
+	public Usuario traerPorEmail(String email) throws Exception{
+		if(email.isBlank())
+			throw new Exception("Error en capa negocio. El email ingresado no puede ser nulo o estar vacio");
+		return dao.traerPorEmail(email);
+	}
+	
+	public String iniciarSesion(String email, String contrasenia) throws Exception {
+		if(contrasenia.isBlank())
+			throw new Exception("Error en capa negocio. La contraseña no puede ser nula o estar vacia");
+		
+		String retorno;
+		Usuario u = traerPorEmail(email);
+		
+		if(u != null && u.getPassword().equals(contrasenia)) {
+			retorno = "Inicio de sesión exitoso";
+		} else {
+			retorno = "Datos ingresados incorrectos";
+		}
+		
+		return retorno;
+	}
 }

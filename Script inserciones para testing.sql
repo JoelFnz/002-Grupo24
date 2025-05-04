@@ -6,6 +6,8 @@ usuario(
     apellido,
     nombre,
     fechaDeNacimiento,
+    username,
+    `password`,
     baja
 ) 
 VALUES(
@@ -13,18 +15,24 @@ VALUES(
     'Fernandez',
     'Joel',
     '2001-08-02',
+    'joel',
+    '12345',
     false
 ), (
 	22222222,
     'Aguirre',
     'Diego',
     '1999-10-7',
+    'diego10',
+    'd10s',
     false
 ), (
 	33333333,
     'Brisa',
     'Aguilera',
     '2002-04-14',
+    'brichu',
+    'ariana12',
     false
 );
 

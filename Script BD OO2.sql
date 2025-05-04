@@ -29,7 +29,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Contacto` (
   `telefono` VARCHAR(20) NOT NULL,
-  `email` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(50) NOT NULL UNIQUE,
   `idContacto` INT NOT NULL,
   PRIMARY KEY (`idContacto`),
   INDEX `fk_Contacto_Usuario_idx` (`idContacto` ASC) VISIBLE,
@@ -129,6 +129,9 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`TicketTieneEmpleado` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+ALTER TABLE `Grupo24_OO2`.`Usuario`
+ADD COLUMN `username` VARCHAR(50) NOT NULL,
+ADD COLUMN `password` VARCHAR(255) NOT NULL;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
