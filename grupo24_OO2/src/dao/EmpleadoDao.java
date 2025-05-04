@@ -176,4 +176,23 @@ public class EmpleadoDao {
     	}
     	return lista;
     }
+    
+    // "CU: Consultar tickets asociados"
+    //  devuelve una lista con todos los tickets asociados a un empleado en base a un idEmpleado.
+    public List<Ticket> traerTicketsPorEmpleado(long idEmpleado) {
+        List<Ticket> tickets = null;
+        try {
+            iniciaOperacion();
+            Query<Ticket> query = session.createQuery(
+            		"select t from Empleado e join e.ticketAsignado t where e.idUsuario = :idEmpleado", Ticket.class
+            );
+            query.setParameter("idEmpleado", idEmpleado);
+            tickets = query.getResultList();
+        } catch (HibernateException he) {
+            manejaExcepcion(he);
+        } finally {
+            session.close();
+        }
+        return tickets;
+    }
 }
