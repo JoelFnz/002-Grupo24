@@ -11,7 +11,7 @@ public class TestContactoABM {
             ContactoABM abm = new ContactoABM();
 
             // Crear un usuario de prueba
-            UsuarioFinal usuario = new UsuarioFinal(12345678, "Juan", "Pérez", LocalDate.of(1990, 5, 15), null);
+            UsuarioFinal usuario = new UsuarioFinal(12345678, "Juan", "Pérez", LocalDate.of(1990, 5, 15), null, "juanUser", "1234");
 
             // Crear contacto y asociarlo al usuario
             Contacto contacto = new Contacto("juan@example.com", "123456789", usuario);

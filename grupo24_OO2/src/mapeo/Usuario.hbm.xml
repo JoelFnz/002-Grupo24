@@ -13,6 +13,10 @@
 		<property column="fechaDeNacimiento" name="fechaDeNacimiento" type="LocalDate" />
 		<property column="baja" name="baja" type="boolean" />
 		
+		<!-- Nuevas propiedades para username y password -->
+		<property column="username" name="username" type="string" />
+		<property column="password" name="password" type="string" />
+		
 		<!-- Relaciones con otras clases -->
 		<one-to-one name="contacto" class="datos.Contacto" ></one-to-one>
 		

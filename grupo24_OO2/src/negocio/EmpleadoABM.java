@@ -34,16 +34,17 @@ public class EmpleadoABM {
     }
 
     public long agregarEmpleado(int dni, String nombre, String apellido, LocalDate fechaDeNacimiento,
-            Contacto contacto, LocalDate fechaDeIngreso) {
-        
+            Contacto contacto, LocalDate fechaDeIngreso, String username, String password) {
+
         Empleado existente = dao.traerPorDni(dni);
         if (existente != null) {
             throw new RuntimeException("Ya existe un empleado con DNI " + dni);
         }
 
-        Empleado nuevo = new Empleado(dni, nombre, apellido, fechaDeNacimiento, contacto, fechaDeIngreso);
+        Empleado nuevo = new Empleado(dni, nombre, apellido, fechaDeNacimiento, contacto, fechaDeIngreso, username, password);
         return dao.agregar(nuevo);
     }
+
 
     public void modificarEmpleado(Empleado e) {
         dao.actualizar(e);

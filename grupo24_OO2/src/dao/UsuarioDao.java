@@ -91,6 +91,22 @@ public class UsuarioDao {
 		return objeto;
 	}
 	
+	public Usuario traerPorUsername(String username) {
+	    Usuario usuario = null;
+	    try {
+	        iniciaOperacion();
+	        Query<Usuario> query = session.createQuery("from Usuario u where u.username = :username", Usuario.class);
+	        query.setParameter("username", username);
+	        usuario = query.uniqueResult();
+	    } catch (HibernateException he) {
+	        manejaExcepcion(he);
+	    } finally {
+	        session.close();
+	    }
+	    return usuario;
+	}
+
+	
 	public List<Usuario> traerPorIntervaloDeNacimiento(LocalDate desde, LocalDate hasta){
 		List<Usuario> lista = null;
 		try {
@@ -196,6 +212,28 @@ public class UsuarioDao {
 			session.close();
 		}
 		return lista;
+	}
+
+	/**
+	 * Busca un usuario por su nombre de usuario y contraseña.
+	 * Se utiliza para autenticación (login) del sistema.
+	 * Retorna el usuario si las credenciales coinciden, o null si no hay coincidencia.
+	 */
+	public Usuario traerPorUsernameYPassword(String username, String password) {
+	    Usuario objeto = null;
+	    try {
+	        iniciaOperacion();
+	        Query<Usuario> query = session.createQuery(
+	            "from Usuario u where u.username = :username and u.password = :password", Usuario.class);
+	        query.setParameter("username", username);
+	        query.setParameter("password", password);
+	        objeto = query.uniqueResult();
+	    } catch (HibernateException he) {
+	        manejaExcepcion(he);
+	    } finally {
+	        session.close();
+	    }
+	    return objeto;
 	}
 
 	

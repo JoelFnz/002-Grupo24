@@ -11,9 +11,10 @@ public class UsuarioFinal extends Usuario{
 	}
 
 	public UsuarioFinal(int dni, String nombre, String apellido, LocalDate fechaDeNacimiento, 
-			Contacto contacto) {
-		super(dni, nombre, apellido, fechaDeNacimiento, contacto);
+			Contacto contacto, String username, String password) {
+		super(dni, nombre, apellido, fechaDeNacimiento, contacto, username, password);
 	}
+
 
 	public Set<Ticket> getLstTickets() {
 		return lstTickets;
@@ -25,9 +26,9 @@ public class UsuarioFinal extends Usuario{
 
 	@Override
 	public String toString() {
-		return "UsuarioFinal [lstTickets=" + lstTickets + ", idUsuario=" + idUsuario + ", dni=" + dni + ", apellido="
-				+ apellido + ", nombre=" + nombre + ", fechaDeNacimiento=" + fechaDeNacimiento + ", baja=" + baja
-				+ ", contacto=" + contacto + "]";
+	    return "UsuarioFinal [idUsuario=" + idUsuario + ", dni=" + dni + ", nombre=" + nombre +
+	           ", apellido=" + apellido + ", username=" + getUsername() + "]";
 	}
+
 	
 }

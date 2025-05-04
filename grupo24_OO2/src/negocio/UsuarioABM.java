@@ -2,6 +2,10 @@ package negocio;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import org.hibernate.HibernateException;
+import org.hibernate.query.Query;
+
 import dao.UsuarioDao;
 import datos.Usuario;
 
@@ -16,23 +20,43 @@ public class UsuarioABM {
 		return dao.traerPorDni(dni);
 	}
 
+	public Usuario traerPorUsername(String username) {
+	    return dao.traerPorUsername(username);
+	}
+	
 	public long agregar(Usuario usuario) {
-		// Validar que no exista otro usuario con el mismo DNI
-		Usuario existente = dao.traerPorDni(usuario.getDni());
-		if (existente != null) {
-			throw new RuntimeException("Ya existe un usuario con DNI: " + usuario.getDni());
-		}
-		return dao.agregar(usuario);
+	    // Validar que no exista otro usuario con el mismo DNI
+	    Usuario existente = dao.traerPorDni(usuario.getDni());
+	    if (existente != null) {
+	        throw new RuntimeException("Ya existe un usuario con DNI: " + usuario.getDni());
+	    }
+	    
+	    // Validar que el username no se repita
+	    Usuario existenteUsername = dao.traerPorUsername(usuario.getUsername());
+	    if (existenteUsername != null) {
+	        throw new RuntimeException("Ya existe un usuario con el username: " + usuario.getUsername());
+	    }
+
+	    return dao.agregar(usuario);
 	}
 
 	public void modificar(Usuario usuario) {
-		// Validar que no se repita el DNI con otro usuario
-		Usuario existente = dao.traerPorDni(usuario.getDni());
-		if (existente != null && existente.getIdUsuario() != usuario.getIdUsuario()) {
-			throw new RuntimeException("Ya existe un usuario con DNI: " + usuario.getDni());
-		}
-		dao.actualizar(usuario);
+	    // Validar que no exista otro usuario con el mismo DNI
+	    Usuario existenteDni = dao.traerPorDni(usuario.getDni());
+	    if (existenteDni != null && existenteDni.getIdUsuario() != usuario.getIdUsuario()) {
+	        throw new RuntimeException("Ya existe un usuario con DNI: " + usuario.getDni());
+	    }
+
+	    // Validar que el username no se repita con otro usuario
+	    Usuario existenteUsername = dao.traerPorUsername(usuario.getUsername());
+	    if (existenteUsername != null && existenteUsername.getIdUsuario() != usuario.getIdUsuario()) {
+	        throw new RuntimeException("Ya existe un usuario con el username: " + usuario.getUsername());
+	    }
+
+	    // Si las validaciones pasaron, actualizamos el usuario
+	    dao.actualizar(usuario);
 	}
+
 
 	public void eliminar(long idUsuario) {
 		Usuario usuario = dao.traer(idUsuario);

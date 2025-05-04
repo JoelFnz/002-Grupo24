@@ -24,7 +24,7 @@ public class TestUsuarioFinalABM {
 
         // Agregar un nuevo usuario
         System.out.println("\n==> Agregar nuevo usuario:");
-        UsuarioFinal nuevo = new UsuarioFinal(12345678, "Lucas", "Perez", LocalDate.of(2000, 1, 1), contacto);
+        UsuarioFinal nuevo = new UsuarioFinal(12345678, "Lucas", "Perez", LocalDate.of(2000, 1, 1), contacto, "lucasUser", "6789");
         long idNuevo = abm.agregar(nuevo);
         System.out.println("ID generado: " + idNuevo);
 

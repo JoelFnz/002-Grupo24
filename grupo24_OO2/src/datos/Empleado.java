@@ -12,8 +12,8 @@ public class Empleado extends Usuario{
 	}
 
 	public Empleado(int dni, String nombre, String apellido, LocalDate fechaDeNacimiento, Contacto contacto,
-			LocalDate fechaDeIngreso) {
-		super(dni, nombre, apellido, fechaDeNacimiento, contacto);
+			LocalDate fechaDeIngreso, String username, String password) {
+		super(dni, nombre, apellido, fechaDeNacimiento, contacto, username, password);
 		this.fechaDeIngreso = fechaDeIngreso;
 	}
 

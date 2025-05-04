@@ -12,13 +12,16 @@ public class TestEmpleadoABM {
 
         // Paso 1: Crear el empleado SIN contacto
         Empleado empleado = new Empleado(
-                12345678,
-                "Juan",
-                "Pérez",
-                LocalDate.of(1990, 5, 15),
-                null,
-                LocalDate.of(2020, 1, 10)
-        );
+        	    12345678,
+        	    "Juan",
+        	    "Pérez",
+        	    LocalDate.of(1990, 5, 15),
+        	    null,
+        	    LocalDate.of(2020, 1, 10),
+        	    "juanp",            // username
+        	    "pass123"           // password
+        	);
+
 
         // Paso 2: Crear el contacto con referencia al empleado
         Contacto contacto = new Contacto("correo@ejemplo.com", "1112345678", empleado);
@@ -26,13 +29,16 @@ public class TestEmpleadoABM {
 
         // Paso 3: Guardar el empleado
         long idEmpleado = abm.agregarEmpleado(
-                empleado.getDni(),
-                empleado.getNombre(),
-                empleado.getApellido(),
-                empleado.getFechaDeNacimiento(),
-                empleado.getContacto(),
-                empleado.getFechaDeIngreso()
-        );
+        	    empleado.getDni(),
+        	    empleado.getNombre(),
+        	    empleado.getApellido(),
+        	    empleado.getFechaDeNacimiento(),
+        	    empleado.getContacto(),
+        	    empleado.getFechaDeIngreso(),
+        	    "juanp",         // username
+        	    "pass123"        // password
+        	);
+
         System.out.println("Empleado agregado con ID: " + idEmpleado);
 
         // Traer por ID
