@@ -33,4 +33,8 @@ public class EstadoABM {
 		if (e == null) throw new Exception("No existe el estado con id = " + idEstado);
 		dao.eliminar(e);
 	}
+	
+	public void cambiarEstado(long idTicket, String tipoDeEstado, String descripcionDelEstado) {
+	    dao.cambiarEstado(idTicket, tipoDeEstado, descripcionDelEstado);
+	}
 }

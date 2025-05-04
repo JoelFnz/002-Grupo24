@@ -1,5 +1,6 @@
 package dao;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -81,5 +82,27 @@ public class EstadoDao {
 			session.close();
 		}
 		return lista;
+	}
+	
+	// CU "Cambiar estado de ticket"
+	public void cambiarEstado(long idTicket, String tipoDeEstado, String descripcionDelEstado) {
+		try {
+			iniciaOperacion();
+			Estado estado = session.get(Estado.class, idTicket);
+			if (estado != null) {
+				estado.setTipoDeEstado(tipoDeEstado);
+				estado.setDescripcionDelEstado(descripcionDelEstado);
+				estado.setUltimoCambioEstado(LocalDateTime.now());
+				session.update(estado);
+				tx.commit();
+			} else {
+				System.out.println("No se encontro un estado con idTicket: " + idTicket);
+			}
+		} catch (HibernateException he) {
+			manejaExcepcion(he);
+			throw he;
+		} finally {
+			session.close();
+		}
 	}
 }
