@@ -1,0 +1,3 @@
+ALTER TABLE `Grupo24_OO2`.`Usuario`
+ADD COLUMN `username` VARCHAR(50) NOT NULL,
+ADD COLUMN `password` VARCHAR(255) NOT NULL;
