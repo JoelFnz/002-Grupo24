@@ -57,20 +57,22 @@ public class TestAgregarTicket {
 		//Para eliminar los tickets creados
 		try {
 			for(Ticket t : usuarioAbm.traer(usuario.getIdUsuario()).getLstTickets()) {
-				if(t.getIdTicket() != 1) //1 es el id de un ticket ya cargado
+				if(t.getIdTicket() != 1) //1 es el id de un ticket anteriormente cargado
 					ticketAbm.eliminar(t.getIdTicket());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		System.out.println("\nTickets después del borrado:\n");
+		/*
 		//Para mostrar los tickets despues del borrado
+		System.out.println("\nTickets después del borrado:\n");
 		try {
 			for(Ticket t : usuarioAbm.traer(usuario.getIdUsuario()).getLstTickets())
 				System.out.println(t);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 }
