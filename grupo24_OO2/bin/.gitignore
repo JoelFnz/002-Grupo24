@@ -1,4 +1,7 @@
 /dao/
-/test/
+/datos/
+/hibernate.cfg.xml
 /mapeo/
 /negocio/
+/test/
+/testEntrega1/

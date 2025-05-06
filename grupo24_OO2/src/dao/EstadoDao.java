@@ -85,7 +85,7 @@ public class EstadoDao {
 	}
 	
 	// CU "Cambiar estado de ticket"
-	public void cambiarEstado(long idTicket, String tipoDeEstado, String descripcionDelEstado) {
+	public void cambiarEstado(long idTicket, String tipoDeEstado, String descripcionDelEstado) throws Exception{
 		try {
 			iniciaOperacion();
 			Estado estado = session.get(Estado.class, idTicket);

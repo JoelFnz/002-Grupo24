@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Empleado` (
   CONSTRAINT `fk_Empleado_Usuario1`
     FOREIGN KEY (`idEmpleado`)
     REFERENCES `Grupo24_OO2`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`UsuarioFinal` (
   CONSTRAINT `fk_UsuarioFinal_Usuario1`
     FOREIGN KEY (`idUsuarioFinal`)
     REFERENCES `Grupo24_OO2`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `Grupo24_OO2`.`Estado` (
   CONSTRAINT `fk_Estado_Ticket1`
     FOREIGN KEY (`idEstado`)
     REFERENCES `Grupo24_OO2`.`Ticket` (`idTicket`)
-    ON DELETE NO ACTION
+	ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

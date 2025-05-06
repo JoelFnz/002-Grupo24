@@ -11,11 +11,11 @@ public class Estado {
 	
 	public Estado() {}
 
-	public Estado(String tipoDeEstado, String descripcionDelEstado, LocalDateTime ultimoCambioEstado, Ticket ticket) {
+	public Estado(String tipoDeEstado, String descripcionDelEstado, LocalDateTime ultimoCambioEstado, Ticket ticket) throws Exception {
 		super();
-		this.tipoDeEstado = tipoDeEstado;
+		setTipoDeEstado(tipoDeEstado);
 		this.descripcionDelEstado = descripcionDelEstado;
-		this.ultimoCambioEstado = ultimoCambioEstado;
+		setUltimoCambioEstado(ultimoCambioEstado);
 		this.ticket = ticket;
 	}
 
@@ -31,7 +31,9 @@ public class Estado {
 		return tipoDeEstado;
 	}
 
-	public void setTipoDeEstado(String tipoDeEstado) {
+	public void setTipoDeEstado(String tipoDeEstado) throws Exception{
+		if(tipoDeEstado.isBlank())
+			throw new Exception("Error en capa datos. El tipoDeEstado no puede estar vacío");
 		this.tipoDeEstado = tipoDeEstado;
 	}
 
@@ -47,7 +49,9 @@ public class Estado {
 		return ultimoCambioEstado;
 	}
 
-	public void setUltimoCambioEstado(LocalDateTime ultimoCambioEstado) {
+	public void setUltimoCambioEstado(LocalDateTime ultimoCambioEstado) throws Exception{
+		if(this.ultimoCambioEstado != null && ultimoCambioEstado.isBefore(this.ultimoCambioEstado))
+			throw new Exception("Error en capa datos. El nuevo ultimoCambioEstado debe ser posterior al actual");
 		this.ultimoCambioEstado = ultimoCambioEstado;
 	}
 

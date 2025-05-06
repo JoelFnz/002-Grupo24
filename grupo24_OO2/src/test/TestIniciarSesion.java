@@ -32,6 +32,5 @@ public class TestIniciarSesion {
 				e.printStackTrace();
 			}
 		}
-		
 
 }

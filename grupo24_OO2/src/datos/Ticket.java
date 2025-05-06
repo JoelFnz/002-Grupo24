@@ -16,12 +16,12 @@ public class Ticket {
 	public Ticket() {}
 
 	public Ticket(UsuarioFinal usuario, String titulo, String descripcion, String motivo, LocalDateTime fechaDeCreacion,
-			Estado estado) {
+			Estado estado) throws Exception {
 		super();
 		this.usuario = usuario;
-		this.titulo = titulo;
-		this.descripcion = descripcion;
-		this.motivo = motivo;
+		setTitulo(titulo);
+		setDescripcion(descripcion);
+		setMotivo(motivo);
 		this.fechaDeCreacion = fechaDeCreacion;
 		this.estado = estado;
 	}
@@ -46,7 +46,9 @@ public class Ticket {
 		return titulo;
 	}
 
-	public void setTitulo(String titulo) {
+	public void setTitulo(String titulo) throws Exception {
+		if(titulo.isBlank())
+			throw new Exception("Error en capa datos. El título no puede estar vacío");
 		this.titulo = titulo;
 	}
 
@@ -54,7 +56,9 @@ public class Ticket {
 		return descripcion;
 	}
 
-	public void setDescripcion(String descripcion) {
+	public void setDescripcion(String descripcion) throws Exception{
+		if(descripcion.isBlank()) 
+			throw new Exception("Error en capa datos. La descripción no puede estar vacía");
 		this.descripcion = descripcion;
 	}
 
@@ -62,7 +66,9 @@ public class Ticket {
 		return motivo;
 	}
 
-	public void setMotivo(String motivo) {
+	public void setMotivo(String motivo) throws Exception {
+		if(motivo.isBlank())
+			throw new Exception("Error en capa datos. El motivo no puede estar vacío");
 		this.motivo = motivo;
 	}
 

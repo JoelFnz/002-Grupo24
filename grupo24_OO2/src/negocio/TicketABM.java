@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import dao.TicketDao;
 import datos.Ticket;
+import datos.Usuario;
 import datos.UsuarioFinal;
+import datos.Estado;
 
 public class TicketABM {
 	private TicketDao dao = new TicketDao();
@@ -22,6 +24,17 @@ public class TicketABM {
 
 	public long agregar(Ticket ticket) {
 		return dao.agregar(ticket);
+	}
+	
+	public long agregar(UsuarioFinal usuario, String titulo, String descripcion, String motivo) throws Exception {
+		Ticket aux = new Ticket(usuario, titulo , descripcion, motivo, LocalDateTime.now(), null);
+		aux.setEstado(new Estado(
+				"enviado", 
+				"Tu ticket ha sido enviado. Pronto un empleado se encargará de tu ticket.",
+				LocalDateTime.now(),
+				aux)
+				);
+		return dao.agregar(aux);
 	}
 
 	public void actualizar(Ticket ticket) throws Exception {
@@ -44,4 +57,5 @@ public class TicketABM {
 	public List<Ticket> traerPorUsuarioYHastaCreacion(UsuarioFinal usuarioFinal, LocalDateTime hastaCreacion){
 		return dao.traerHasta(usuarioFinal, hastaCreacion);
 	}
+	
 }
