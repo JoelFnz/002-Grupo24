@@ -20,7 +20,6 @@ public class TestTraerPorUsuarioFinal {
 		
 		TicketABM ticketABM= new TicketABM();
 		
-		
 		try {
 			ticketABM.traerPorUsuarioFinal(listaAux.get(0));
 		} catch (Exception e) {

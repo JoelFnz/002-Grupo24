@@ -34,7 +34,7 @@ public class EstadoABM {
 		dao.eliminar(e);
 	}
 	
-	public void cambiarEstado(long idTicket, String tipoDeEstado, String descripcionDelEstado) {
+	public void cambiarEstado(long idTicket, String tipoDeEstado, String descripcionDelEstado) throws Exception{
 	    dao.cambiarEstado(idTicket, tipoDeEstado, descripcionDelEstado);
 	}
 }

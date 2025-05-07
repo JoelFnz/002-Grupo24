@@ -121,7 +121,7 @@ public class TicketDao {
 		try {
 			iniciaOperacion();
 			Query<Ticket> query = session.createQuery("from Ticket t where t.usuario = :usuario " , Ticket.class);
-	        query.setParameter("usuario", usuarioFinal.getIdUsuario());
+	        query.setParameter("usuario", usuarioFinal);
 			lista = query.getResultList();
 		} finally {
 			session.close();
