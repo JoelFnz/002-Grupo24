@@ -26,8 +26,9 @@ public class UsuarioFinal extends Usuario{
 
 	@Override
 	public String toString() {
-	    return "UsuarioFinal [idUsuario=" + idUsuario + ", dni=" + dni + ", nombre=" + nombre +
-	           ", apellido=" + apellido + ", username=" + getUsername() + "]";
+		return "UsuarioFinal [lstTickets=" + lstTickets + ", idUsuario=" + idUsuario + ", dni=" + dni + ", apellido="
+				+ apellido + ", nombre=" + nombre + ", fechaDeNacimiento=" + fechaDeNacimiento + ", baja=" + baja
+				+ ", contacto=" + contacto + ", username=" + username + ", password=" + password + "]";
 	}
 
 	

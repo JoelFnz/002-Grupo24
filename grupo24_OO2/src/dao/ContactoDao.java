@@ -70,6 +70,21 @@ public class ContactoDao {
 		}
 		return objeto;
 	}
+	
+	public Contacto traerPorEmail(String email) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Contacto contacto = null;
+		try {
+			String hql = "from Contacto c where c.email = :email";
+			contacto = (Contacto) session.createQuery(hql)
+				.setParameter("email", email)
+				.uniqueResult();
+		} finally {
+			session.close();
+		}
+		return contacto;
+	}
+
 
 	public List<Contacto> traer() {
 		List<Contacto> lista = new ArrayList<Contacto>();
