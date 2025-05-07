@@ -58,4 +58,14 @@ public class TicketABM {
 		return dao.traerHasta(usuarioFinal, hastaCreacion);
 	}
 	
+	
+	//to do 
+	public List<Ticket> traerPorUsuarioFinal(UsuarioFinal usuarioFinal)throws Exception{////
+			
+		return dao.traerPorUsuarioFinal(usuarioFinal);
+			
+	}
+	
+	
+	
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="datos.Usuario" table="usuario">
+		<id column="idUsuario" name="idUsuario">
+			<generator class="identity" />
+		</id>
+		<property column="apellido" name="apellido" type="string" />
+		<property column="nombre" name="nombre" type="string" />
+		<property column="dni" name="dni" type="int" />
+		<property column="fechaDeNacimiento" name="fechaDeNacimiento" type="LocalDate" />
+		<property column="baja" name="baja" type="boolean" />
+		
+		<!-- Nuevas propiedades para username y password -->
+		<property column="username" name="username" type="string" />
+		<property column="password" name="password" type="string" />
+		
+		<!-- Relaciones con otras clases -->
+		<one-to-one name="contacto" class="datos.Contacto" ></one-to-one>
+		
+		<!-- Herencia con empleado -->
+		<joined-subclass name="datos.Empleado" table="empleado">
+		
+			<key column="idEmpleado" />
+			<property column="fechaDeIngreso" name="fechaDeIngreso" type="LocalDate"/>
+			
+			<!-- Relaciones con otras clases -->
+			<set table="tickettieneempleado" name="ticketAsignado" outer-join="true">
+				<key column="idUsuario"/>
+				<many-to-many column="idTicket" class="datos.Ticket"/>
+			</set>
+			
+		</joined-subclass>
+		
+		<!-- Herencia con usuarioFinal -->
+		<joined-subclass name="datos.UsuarioFinal" table="usuarioFinal">
+			<key column="idUsuarioFinal" />
+			
+			<!-- Relaciones con otras clases -->
+			<set name="lstTickets" table="ticket" order-by="idTicket asc" inverse="true"
+			 lazy="false" fetch="select">
+				<key column="usuarioFinal" not-null="true" />
+				<one-to-many class="datos.Ticket" />
+			</set>
+			
+		</joined-subclass>
+		
+	</class>
+</hibernate-mapping>

@@ -115,5 +115,22 @@ public class TicketDao {
 		return lista;
 	}
 	
+	public List<Ticket> traerPorUsuarioFinal(UsuarioFinal usuarioFinal){
+		
+		List<Ticket> lista = null;
+		try {
+			iniciaOperacion();
+			Query<Ticket> query = session.createQuery("from Ticket t where t.usuario = :usuario " , Ticket.class);
+	        query.setParameter("usuario", usuarioFinal.getIdUsuario());
+			lista = query.getResultList();
+		} finally {
+			session.close();
+		}
+		return lista;
+		
+	}
+	
+	
+	
 	
 }
