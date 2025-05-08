@@ -2,6 +2,7 @@ package negocio;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import dao.TicketDao;
 import datos.Ticket;
@@ -65,6 +66,80 @@ public class TicketABM {
 			
 		return dao.traerPorUsuarioFinal(usuarioFinal);
 			
+	}
+	
+	public List<Ticket> traer(String titulo, UsuarioFinal usuarioFinal) {
+		 List<Ticket> listaAux=new ArrayList<Ticket>();
+		
+		try {
+			listaAux = traerPorUsuarioFinal(usuarioFinal);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<Ticket> resul=new ArrayList<Ticket>();
+		
+		for(Ticket t:listaAux) {
+			
+			if(t.getTitulo().equalsIgnoreCase(titulo)) {
+				
+				resul.add(t);
+			}
+			
+		}
+		
+		return resul;
+	}
+	
+	public List<Ticket> traer(LocalDateTime fechaDeCreacion, UsuarioFinal usuarioFinal) {//done
+		 List<Ticket> listaAux=new ArrayList<Ticket>();
+		
+		try {
+			listaAux = traerPorUsuarioFinal(usuarioFinal);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<Ticket> resul=new ArrayList<Ticket>();
+		
+		for(Ticket t:listaAux) {
+			
+			if(t.getFechaDeCreacion().equals(fechaDeCreacion)) {
+				
+				resul.add(t);
+			}
+			
+		}
+		
+		return resul;
+	}
+
+	public List<Ticket> traer(Estado estado, UsuarioFinal usuarioFinal) {
+		// TODO Auto-generated method stub
+		 List<Ticket> listaAux=new ArrayList<Ticket>();
+			
+			try {
+				listaAux = traerPorUsuarioFinal(usuarioFinal);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			List<Ticket> resul=new ArrayList<Ticket>();
+			
+			for(Ticket t:listaAux) {
+				
+				//if(t.getEstado().getIdEstado()==estado.getIdEstado()) {
+				if(t.getEstado().getDescripcionDelEstado().equalsIgnoreCase(estado.getDescripcionDelEstado())) {
+					System.out.println(t.getEstado().getIdEstado());
+					resul.add(t);
+				}
+				
+			}
+			
+			return resul;
 	}
 	
 	
