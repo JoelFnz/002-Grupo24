@@ -8,6 +8,7 @@ import datos.Ticket;
 import datos.Usuario;
 import datos.UsuarioFinal;
 import datos.Estado;
+import negocio.EstadoABM;
 
 public class TicketABM {
 	private TicketDao dao = new TicketDao();
@@ -34,7 +35,7 @@ public class TicketABM {
 				LocalDateTime.now(),
 				aux)
 				);
-		return dao.agregar(aux);
+		return dao.traer((new EstadoABM()).agregar(aux.getEstado())).getIdTicket();
 	}
 
 	public void actualizar(Ticket ticket) throws Exception {
