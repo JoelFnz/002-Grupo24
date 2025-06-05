@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.unla.grupo24oo2.dtos.ClienteRegistroDTO;
 import com.unla.grupo24oo2.entities.Cliente;
-import com.unla.grupo24oo2.services.ClienteService;
+import com.unla.grupo24oo2.services.implementation.ClienteService;
 
 @SpringBootTest
 public class ClienteServiceTest {

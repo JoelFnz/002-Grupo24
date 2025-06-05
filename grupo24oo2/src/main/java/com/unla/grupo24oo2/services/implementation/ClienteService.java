@@ -1,4 +1,4 @@
-package com.unla.grupo24oo2.services;
+package com.unla.grupo24oo2.services.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,9 +8,10 @@ import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.repositories.ClienteRepository;
+import com.unla.grupo24oo2.services.IClienteService;
 
 @Service
-public class ClienteService {
+public class ClienteService implements IClienteService{
 
     @Autowired
     private ClienteRepository clienteRepository;
