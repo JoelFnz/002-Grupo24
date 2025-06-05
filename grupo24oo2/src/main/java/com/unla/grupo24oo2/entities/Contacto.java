@@ -1,6 +1,5 @@
 package com.unla.grupo24oo2.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -27,10 +26,5 @@ public class Contacto {
 	@OneToOne
 	@MapsId
 	@JoinColumn(name="idContacto", referencedColumnName="idUsuario", nullable=false)
-	@Setter(AccessLevel.NONE) //Lo inhabilito para poder llamar el setter en otros constructores.
 	private Usuario usuario;
-	
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 }

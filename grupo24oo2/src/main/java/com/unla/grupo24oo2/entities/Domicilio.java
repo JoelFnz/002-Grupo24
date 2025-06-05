@@ -26,10 +26,5 @@ public class Domicilio {
 	@OneToOne
 	@MapsId
 	@JoinColumn(name="idDomicilio", referencedColumnName="idUsuario", nullable=false)
-	@Setter(AccessLevel.NONE) //Lo inhabilito para poder llamar el setter en otros constructores.
 	private Usuario usuario;
-	
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 }

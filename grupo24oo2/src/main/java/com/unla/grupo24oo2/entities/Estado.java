@@ -27,10 +27,5 @@ public class Estado {
 	@OneToOne
 	@MapsId
 	@JoinColumn(name="idEstado", referencedColumnName="idTicket", nullable=false)
-	@Setter(AccessLevel.NONE)
 	private Ticket ticket;
-	
-	public void setTicket(Ticket ticket) {
-		this.ticket = ticket;
-	}
 }
