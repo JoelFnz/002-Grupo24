@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.unla.grupo24oo2.dtos.ClienteRegistroDTO;
 import com.unla.grupo24oo2.helpers.ViewRouterHelper;
@@ -16,16 +17,20 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+ // Mostrar formulario de registro
     @GetMapping("/registro")
-    public String mostrarFormularioRegistro(Model model) {
-        model.addAttribute("cliente", new ClienteRegistroDTO());
-        return ViewRouterHelper.REGISTRO; // carga registro.html desde /templates
+    public ModelAndView mostrarFormularioRegistro() {
+        ModelAndView mAV = new ModelAndView(ViewRouterHelper.REGISTRO);
+        mAV.addObject("cliente", new ClienteRegistroDTO());
+        return mAV;
     }
 
+ // Procesar el formulario enviado
     @PostMapping("/registro")
-    public String procesarFormulario(@ModelAttribute("cliente") ClienteRegistroDTO dto, Model model) {
+    public ModelAndView procesarFormulario(@ModelAttribute("cliente") ClienteRegistroDTO dto) {
         clienteService.registrarCliente(dto);
-        model.addAttribute("mensaje", "Registro exitoso");
-        return ViewRouterHelper.REGISTRO_EXITOSO; // otra vista HTML
+        ModelAndView mAV = new ModelAndView(ViewRouterHelper.REGISTRO_EXITOSO);
+        mAV.addObject("mensaje", "Registro exitoso");
+        return mAV;
     }
 }

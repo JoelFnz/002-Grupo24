@@ -7,14 +7,14 @@ import com.unla.grupo24oo2.dtos.ClienteRegistroDTO;
 import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
-import com.unla.grupo24oo2.repositories.ClienteRepository;
+import com.unla.grupo24oo2.repositories.IClienteRepository;
 import com.unla.grupo24oo2.services.IClienteService;
 
 @Service
 public class ClienteService implements IClienteService{
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private IClienteRepository clienteRepository;
 
     public Cliente registrarCliente(ClienteRegistroDTO dto) {
         if (clienteRepository.findByDni(dto.getDni()).isPresent()) {
