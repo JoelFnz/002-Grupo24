@@ -1,6 +1,7 @@
 package com.unla.grupo24oo2.services.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.unla.grupo24oo2.dtos.EmpleadoRegistroDTO;
@@ -15,6 +16,9 @@ public class EmpleadoService implements IEmpleadoService {
 
     @Autowired
     private IEmpleadoRepository empleadoRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;	//<-- Agregado
 
     public Empleado registrarEmpleado(EmpleadoRegistroDTO dto) {
         if (empleadoRepository.findByNroEmpleado(dto.getNroEmpleado()).isPresent()) {
@@ -36,7 +40,8 @@ public class EmpleadoService implements IEmpleadoService {
         contacto.setEmail(dto.getEmail());
 
         // Crear Empleado y asociar domicilio y contacto
-        Empleado nuevo = new Empleado(dto.getNroEmpleado(),dto.getDni(), dto.getNombre(), dto.getContrasenia(), domicilio, contacto);
+        String contraseniaHasheada = passwordEncoder.encode(dto.getContrasenia()); // <-- Agregado
+        Empleado nuevo = new Empleado(dto.getNroEmpleado(),dto.getDni(), dto.getNombre(), contraseniaHasheada, domicilio, contacto);
 
         domicilio.setUsuario(nuevo);
         contacto.setUsuario(nuevo);

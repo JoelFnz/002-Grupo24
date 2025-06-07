@@ -1,6 +1,7 @@
 package com.unla.grupo24oo2.services.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.unla.grupo24oo2.dtos.ClienteRegistroDTO;
@@ -15,6 +16,9 @@ public class ClienteService implements IClienteService{
 
     @Autowired
     private IClienteRepository clienteRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;	//<-- Agregado
 
     public Cliente registrarCliente(ClienteRegistroDTO dto) {
         if (clienteRepository.findByDni(dto.getDni()).isPresent()) {
@@ -32,7 +36,8 @@ public class ClienteService implements IClienteService{
         contacto.setEmail(dto.getEmail());
 
         // Crear Cliente y asignar domicilio y contacto
-        Cliente nuevo = new Cliente(dto.getDni(), dto.getNombre(), dto.getContrasenia(), domicilio, contacto);
+        String contraseniaHasheada = passwordEncoder.encode(dto.getContrasenia()); // <-- Agregado
+        Cliente nuevo = new Cliente(dto.getDni(), dto.getNombre(), contraseniaHasheada, domicilio, contacto);
 
         // Establecer relación inversa
         domicilio.setUsuario(nuevo);
