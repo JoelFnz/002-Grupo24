@@ -11,5 +11,6 @@ public class TicketResponseDTO {
 	private String nroTicket;
 	private LocalDateTime fechaYHoraDeCreacion;
 	private LocalDateTime fechaYHoraDeCaducidad;
+	private String estado;
 	private int dniCliente;
 }

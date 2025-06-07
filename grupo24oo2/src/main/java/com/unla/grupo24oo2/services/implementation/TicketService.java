@@ -2,13 +2,19 @@ package com.unla.grupo24oo2.services.implementation;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.unla.grupo24oo2.dtos.TicketDTO;
+import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.dtos.TicketResponseDTO;
 import com.unla.grupo24oo2.entities.Cliente;
+import com.unla.grupo24oo2.entities.Estado;
 import com.unla.grupo24oo2.entities.Servicio;
 import com.unla.grupo24oo2.entities.Ticket;
+import com.unla.grupo24oo2.entities.TipoDeEstado;
 import com.unla.grupo24oo2.repositories.IClienteRepository;
 import com.unla.grupo24oo2.repositories.IServicioRepository;
 import com.unla.grupo24oo2.repositories.ITicketRepository;
@@ -35,8 +41,13 @@ public class TicketService implements ITicketService {
 
 		Cliente cliente = clienteRepository.findByDni(ticketDTO.getDniCliente())
 				.orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-
+		
 		Ticket ticket = new Ticket(cliente, servicio);
+		Estado estado = new Estado();
+		estado.setEstado(TipoDeEstado.INICIADO);
+		estado.setTicket(ticket);
+		ticket.setEstado(estado);
+		
 		ticket = ticketRepository.save(ticket);
 
 		String nroTicket = "TKT-" + ticket.getIdTicket() + "-SVC-" + servicio.getIdServicio();
@@ -47,6 +58,21 @@ public class TicketService implements ITicketService {
 		ticketResponse.setDniCliente(ticketDTO.getDniCliente());
 		
 		return ticketResponse;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<TicketResponseDTO> obtenerTicketsPorFiltro(TicketFilterDTO filter, int dniCliente, Pageable pageable) {
+	    Cliente cliente = clienteRepository.findByDni(dniCliente)
+	            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+	    
+	    Page<Ticket> tickets = ticketRepository.findByClienteAndFilter(cliente, filter, pageable);
+	    
+	    return tickets.map(ticket -> {
+	    	TicketResponseDTO dto = modelMapper.map(ticket, TicketResponseDTO.class);
+	    	dto.setEstado(ticket.getEstado().getEstado().toString());
+	    	return dto;
+	    });
 	}
 
 }
