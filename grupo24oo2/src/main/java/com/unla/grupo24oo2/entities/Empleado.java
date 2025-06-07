@@ -22,6 +22,9 @@ public class Empleado extends Usuario{
 	@Column(unique=true)
 	private String nroEmpleado;
 	
+	@Column(unique=true)
+    private int dni; // <--Nuevo atributo
+	
 	@CreationTimestamp
 	private LocalDate fechaDeIngreso;
 	
@@ -34,8 +37,9 @@ public class Empleado extends Usuario{
 	@ManyToMany(mappedBy="empleados", fetch=FetchType.LAZY)
 	private List<Servicio> servicios;
 	
-	public Empleado(String nroEmpleado, String nombre, String contrasenia, Domicilio domicilio, Contacto contacto) {
+	public Empleado(String nroEmpleado,int dni, String nombre, String contrasenia, Domicilio domicilio, Contacto contacto) {
 		super(nombre, contrasenia, domicilio, contacto);
 		this.nroEmpleado = nroEmpleado;
+		this.dni = dni;
 	}
 }
