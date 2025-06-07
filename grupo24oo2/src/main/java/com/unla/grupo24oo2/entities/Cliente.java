@@ -2,6 +2,8 @@ package com.unla.grupo24oo2.entities;
 
 import java.util.List;
 
+import com.unla.grupo24oo2.entities.enums.RoleType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,7 +24,7 @@ public class Cliente extends Usuario{
 	private List<Ticket> ticketsAsociados;
 	
 	public Cliente(int dni, String nombre, String contrasenia, Domicilio domicilio, Contacto contacto) {
-		super(nombre, contrasenia, domicilio, contacto);
+		super(nombre, contrasenia, domicilio, contacto, RoleType.CLIENTE);  // <-- asignar el rol aquí
 		this.dni = dni;
 	}
 }

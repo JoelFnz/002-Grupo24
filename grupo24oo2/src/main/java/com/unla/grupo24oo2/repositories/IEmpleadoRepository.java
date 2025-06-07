@@ -9,4 +9,5 @@ import com.unla.grupo24oo2.entities.Empleado;
 public interface IEmpleadoRepository extends JpaRepository<Empleado, Long> {
     Optional<Empleado> findByDni(int dni);
     Optional<Empleado> findByNroEmpleado(String nroEmpleado);
+    Optional<Empleado> findByContactoEmail(String email);
 }

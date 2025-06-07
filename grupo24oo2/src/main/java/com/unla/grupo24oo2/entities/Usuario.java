@@ -5,8 +5,13 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.unla.grupo24oo2.entities.enums.RoleType;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,11 +50,17 @@ public abstract class Usuario {
 	@UpdateTimestamp
 	protected LocalDateTime updatedAt;
 	
-	public Usuario(String nombre, String contrasenia, Domicilio domicilio, Contacto contacto) {
+	// NUEVO: atributo para el rol del usuario
+	@Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false)
+    protected RoleType rol;
+	
+	public Usuario(String nombre, String contrasenia, Domicilio domicilio, Contacto contacto, RoleType rol) {
 		this.nombre = nombre;
 		this.contrasenia = contrasenia;
 		this.domicilio = domicilio;
 		this.contacto = contacto;
+		this.rol = rol;
 		if(domicilio != null)
 			domicilio.setUsuario(this);
 		if(contacto != null)

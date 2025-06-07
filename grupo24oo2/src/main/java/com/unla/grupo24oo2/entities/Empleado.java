@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.unla.grupo24oo2.entities.enums.RoleType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,7 +40,7 @@ public class Empleado extends Usuario{
 	private List<Servicio> servicios;
 	
 	public Empleado(String nroEmpleado,int dni, String nombre, String contrasenia, Domicilio domicilio, Contacto contacto) {
-		super(nombre, contrasenia, domicilio, contacto);
+		super(nombre, contrasenia, domicilio, contacto, RoleType.EMPLEADO);  // <-- asignar el rol aquí
 		this.nroEmpleado = nroEmpleado;
 		this.dni = dni;
 	}
