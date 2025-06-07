@@ -28,4 +28,5 @@ public class Estado {
 	@MapsId
 	@JoinColumn(name="idEstado", referencedColumnName="idTicket", nullable=false)
 	private Ticket ticket;
+	
 }

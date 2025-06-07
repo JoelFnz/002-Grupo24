@@ -61,4 +61,11 @@ public class Ticket {
 	
 	@OneToOne(mappedBy="ticket", cascade=CascadeType.ALL)
 	private Estado estado;
+	
+	public Ticket(Cliente cliente, Servicio servicioSolicitado) {
+		this.cliente = cliente;
+		this.servicioSolicitado = servicioSolicitado;
+		fechaYHoraDeCaducidad = LocalDateTime.now().plusDays(180);
+		nroTicket = "TKT-" + idTicket + "-SVC-" + servicioSolicitado.getIdServicio();
+	}
 }
