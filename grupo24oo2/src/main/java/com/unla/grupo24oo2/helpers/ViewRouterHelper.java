@@ -8,4 +8,6 @@ public class ViewRouterHelper {
 	public static final String CREACION_TICKET = "creacion_ticket_exitosa";
 	public static final String REGISTRO_EMPLEADO = "registro_empleado";
 	public static final String HISTORIAL_TICKET = "historial_ticket";
+	public static final String LOGIN = "login";
+
 }

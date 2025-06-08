@@ -2,6 +2,10 @@ package com.unla.grupo24oo2.configurations.mapper;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,43 +23,77 @@ public class SecurityConfiguration {
     // Constructor para inyectar el servicio que carga los usuarios desde la base de datos
     public SecurityConfiguration(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
+        System.out.println("SecurityConfiguration creada");
     }
     
-    // Configura la cadena de filtros de seguridad
+    // Define el comportamiento de seguridad para las rutas HTTP
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("Entrando a filterChain()");  // Marca cuando se llama a este método
+        
         http
-            .authorizeHttpRequests(authz -> authz
-                // Rutas publicas: no requieren autenticacion
-                .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
-                // Cualquier otra ruta necesita autenticacion
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                // Ruta personalizada para el formulario de login
-                .loginPage("/login")
-                // A donde redirige si el login es exitoso
-                .defaultSuccessUrl("/home", true) // <-- Despues lo modificamos
-                .permitAll() // Permitir el acceso al formulario a todos
-            )
-            .logout(logout -> logout
-                // A donde redirige cuando se hace logout
-                .logoutSuccessUrl("/login?logout") // <-- Despues lo modificamos
-                .permitAll() // Permitir logout sin restricciones
-            );
-
-        return http.build(); // Devuelve la cadena de filtros configurada
+            .authorizeHttpRequests(authz -> {
+                System.out.println("Configurando autorización de rutas");
+                authz
+                	// Rutas públicas (sin login)
+                    .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
+                    //.anyRequest().authenticated()
+                    .anyRequest().permitAll();						// <-- Despues lo cambiamos
+            })
+            .formLogin(form -> {
+            	// Configura login con formulario
+                form
+                    .loginPage("/login")							// URL de la vista de login
+                    .failureUrl("/login?error=true") 				// Esto redirige cuando el login falla
+                    .loginProcessingUrl("/perform_login")			// Ruta que Spring intercepta para procesar el login
+                    .usernameParameter("email")
+                    .passwordParameter("contrasenia")
+                    .defaultSuccessUrl("/tickets/historial", true)	// Pagina a la que redirige tras login exitoso
+                    .permitAll();
+            })
+            .logout(logout -> {
+                System.out.println("Configurando logout");
+             // Configura logout
+                logout
+                    .logoutSuccessUrl("/login?logout")
+                    .permitAll();
+            })
+            .csrf(csrf -> {
+                System.out.println("Desactivando CSRF");			// <-- Despues lo cambiamos
+                csrf.disable();
+            });
+        
+        System.out.println("Finalizando configuración del SecurityFilterChain");
+        return http.build();
     }
     
-    // Registra el servicio que usara Spring Security para cargar los usuarios
+    // Registra el servicio personalizado que Spring Security va a usar para cargar usuarios
     @Bean
+    @Primary
     public UserDetailsService userDetailsService() {
+        System.out.println("Registrando UserDetailsService");
         return userDetailsService;
     }
     
-    // Bean para encriptar contraseñas usando BCrypt
+    // Registra el codificador de contraseñas que se va a usar para comparar las contraseñas encriptadas
     @Bean
     public PasswordEncoder passwordEncoder() {
+        System.out.println("Registrando PasswordEncoder");
         return new BCryptPasswordEncoder();
     }
+    
+    // Se define el AuthenticationManager para manejar la autenticación en la aplicación
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+    	// Crea un proveedor de autenticación basado en DAO, que utiliza un UserDetailsService para cargar los datos del usuario
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        // Se especifica que implementación de UserDetailsService se va a usar
+        authProvider.setUserDetailsService(userDetailsService);
+        // Se configura el codificador de contraseñas para comparar correctamente las contraseñas encriptadas (BCrypt)
+        authProvider.setPasswordEncoder(passwordEncoder);
+        
+        // Se retorna una instancia de ProviderManager que administra el proveedor configurado
+        return new ProviderManager(authProvider);
+    }
+
 }

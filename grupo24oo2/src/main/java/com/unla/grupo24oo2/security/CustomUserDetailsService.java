@@ -3,7 +3,9 @@ package com.unla.grupo24oo2.security;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.unla.grupo24oo2.entities.Cliente;
@@ -14,27 +16,34 @@ import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+	// Inyección de dependencias para buscar usuarios en la base de datos
     @Autowired
     private IClienteRepository clienteRepository;
 
     @Autowired
     private IEmpleadoRepository empleadoRepository;
-
+    
+    // Este metodo se llama automaticamente cuando Spring Security necesita cargar un usuario por su email (username)
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Buscar primero en empleados
+        System.out.println("=== loadUserByUsername ejecutándose con email: " + email);
+
+        // Buscar en empleados
         Optional<Empleado> empleado = empleadoRepository.findByContactoEmail(email);
         if (empleado.isPresent()) {
-            return new CustomUserDetails(empleado.get());
+            System.out.println("Empleado encontrado: " + empleado.get().getContacto().getEmail());
+            return new CustomUserDetails(empleado.get(), "EMPLEADO");
         }
 
-        // Luego en clientes
+        // Buscar en clientes
         Optional<Cliente> cliente = clienteRepository.findByContactoEmail(email);
         if (cliente.isPresent()) {
-            return new CustomUserDetails(cliente.get());
+            System.out.println("Cliente encontrado: " + cliente.get().getContacto().getEmail());
+            return new CustomUserDetails(cliente.get(), "CLIENTE");
         }
 
-        // Si no se encuentra en ninguno
+        // Si no se encontro ningún usuario
         throw new UsernameNotFoundException("No se encontró un usuario con el email: " + email);
     }
 }
+
