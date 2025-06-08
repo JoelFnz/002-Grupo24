@@ -18,6 +18,7 @@ import com.unla.grupo24oo2.entities.Estado;
 import com.unla.grupo24oo2.entities.Servicio;
 import com.unla.grupo24oo2.entities.Ticket;
 import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
+import com.unla.grupo24oo2.exceptions.NoRegisterFoundException;
 import com.unla.grupo24oo2.repositories.IClienteRepository;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.repositories.IServicioRepository;
@@ -44,10 +45,10 @@ public class TicketService implements ITicketService {
 	@Override
 	public TicketResponseDTO crearTicket(TicketDTO ticketDTO) {
 		Servicio servicio = servicioRepository.findByNombreServicio(ticketDTO.getNombreServicio())
-				.orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+				.orElseThrow(() -> new NoRegisterFoundException("Servicio no encontrado"));
 
 		Cliente cliente = clienteRepository.findByDni(ticketDTO.getDniCliente())
-				.orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+				.orElseThrow(() -> new NoRegisterFoundException("Cliente no encontrado"));
 		
 		Ticket ticket = new Ticket(cliente, servicio);
 		Estado estado = new Estado();
@@ -71,7 +72,7 @@ public class TicketService implements ITicketService {
 	@Transactional(readOnly = true)
 	public Page<TicketResponseDTO> obtenerTicketsPorFiltro(TicketFilterDTO filter, int dniCliente, Pageable pageable) {
 	    Cliente cliente = clienteRepository.findByDni(dniCliente)
-	            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+	            .orElseThrow(() -> new NoRegisterFoundException("Cliente no encontrado"));
 	    
 	    Page<Ticket> tickets = ticketRepository.findByClienteAndFilter(cliente, filter, pageable);
 	    
