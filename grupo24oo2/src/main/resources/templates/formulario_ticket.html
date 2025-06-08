@@ -17,7 +17,7 @@
 	                    <option value="" disabled selected>Seleccione un servicio</option>
 	                    <option th:each="servicio : ${servicios}" 
 	                            th:value="${servicio.nombreServicio}" 
-	                            th:text="${servicio.descripcion}" 
+	                            th:text="${servicio.nombreServicio}" 
 	                            th:data-descripcion="${servicio.descripcion}"></option>
 	                </select>
 	            </div>
