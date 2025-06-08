@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL}            #  Variable de entorno con la URL de la base de datos
-    username: ${DB_USERNAME}  #  Usuario de la base de datos (configurado en el sistema)
-    password: ${DB_PASSWORD}  #  Contraseña de la base de datos (almacenada como variable de entorno)
+    url: ${DB_URL}
+    username: ${USERNAME}
+    password: ${PASSWORD}
   jpa:
     show-sql: false
     hibernate:
@@ -14,8 +14,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_USER:default@example.com}   #  Email usado para enviar correos (tomado de variable de entorno)
-    password: ${EMAIL_PASSWORD:defaultpassword}   #  Contraseña del email (debe ser una contraseña de aplicación de Gmail) 
+    username: ${EMAIL_USER}   #  Email usado para enviar correos (tomado de variable de entorno)
+    password: ${EMAIL_PASSWORD}   #  Contraseña del email (debe ser una contraseña de aplicación de Gmail) 
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true

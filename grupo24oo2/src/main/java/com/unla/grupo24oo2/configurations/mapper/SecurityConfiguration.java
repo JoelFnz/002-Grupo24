@@ -39,6 +39,7 @@ public class SecurityConfiguration {
                 // Rutas públicas (sin login)
                 .requestMatchers("/", "/login", "/clientes/registro","/empleados/registro", "/recuperar-contrasenia", "/restablecer-contrasenia", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated(); // Protege el resto de las rutas
+                //anyRequest().permitAll();
         })
 
 
