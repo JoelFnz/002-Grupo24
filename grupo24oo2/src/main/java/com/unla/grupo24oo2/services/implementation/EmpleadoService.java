@@ -8,6 +8,7 @@ import com.unla.grupo24oo2.dtos.EmpleadoRegistroDTO;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.entities.Empleado;
+import com.unla.grupo24oo2.exceptions.NoRegisterFoundException;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.services.IEmpleadoService;
 
@@ -48,4 +49,14 @@ public class EmpleadoService implements IEmpleadoService {
 
         return empleadoRepository.save(nuevo);
     }
+
+	@Override
+	public Empleado traerEmpleadoPorDni(int dni){
+		try {
+			return empleadoRepository.findByDni(dni).orElseThrow(() -> new NoRegisterFoundException("El empleado no existe"));
+		} catch (NoRegisterFoundException e) {
+			//e.printStackTrace();
+			return null;
+		}
+	}
 }

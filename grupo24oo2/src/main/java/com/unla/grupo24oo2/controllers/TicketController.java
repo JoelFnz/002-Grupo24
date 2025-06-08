@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.unla.grupo24oo2.dtos.TicketDTO;
 import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.dtos.TicketResponseDTO;
+import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Ticket;
 import com.unla.grupo24oo2.helpers.ViewRouterHelper;
 import com.unla.grupo24oo2.services.IEmpleadoService;
@@ -37,6 +38,9 @@ public class TicketController {
 	
 	@Autowired
 	private IServicioService servicioService; 
+	
+	@Autowired
+	private IEmpleadoService empleadoService;
 	
 	@GetMapping("/crear/{dni}")
 	public ModelAndView mostrarFormularioTicket(@PathVariable("dni") int dniCliente, Model model) {
@@ -70,6 +74,11 @@ public class TicketController {
 	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fechaCaducidad,
 	        @RequestParam(required = false) String nroTicket,
 	        Pageable pageable){
+		
+		Empleado e = empleadoService.traerEmpleadoPorDni(dniCliente);
+		if(e != null) {
+			return redirigirAMostrarTicketsAsociados(e, pageable);
+		}
 	    
 	    TicketFilterDTO filter = new TicketFilterDTO();
 	    filter.setFechaCreacion(fechaCreacion);
@@ -88,6 +97,18 @@ public class TicketController {
 	            fechaCaducidad.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
 
 	    return mV; 
+	}
+	
+	//TODO: Deuda tecnica. Cambiar esto por algo mejor.
+	private ModelAndView redirigirAMostrarTicketsAsociados(Empleado e, Pageable pageable) {
+		ModelAndView mV = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
+
+		 Page<TicketResponseDTO> tickets = ticketService.obtenerTicketsPorNroEmpleado(e.getNroEmpleado(), pageable);
+		 
+		 mV.addObject("nroEmpleado", e.getNroEmpleado());
+		 mV.addObject("tickets", tickets);
+
+		 return mV;
 	}
 	
 	 @GetMapping("/asociados")

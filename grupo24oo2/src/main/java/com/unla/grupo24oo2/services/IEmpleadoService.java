@@ -5,4 +5,6 @@ import com.unla.grupo24oo2.entities.Empleado;
 
 public interface IEmpleadoService {
     Empleado registrarEmpleado(EmpleadoRegistroDTO empleado);
+    
+    Empleado traerEmpleadoPorDni(int dni);
 }

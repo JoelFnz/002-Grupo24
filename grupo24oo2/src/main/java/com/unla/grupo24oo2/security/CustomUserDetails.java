@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.unla.grupo24oo2.entities.Cliente;
+import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Usuario;
 
 import java.util.Collection;
@@ -27,6 +28,9 @@ public class CustomUserDetails implements UserDetails {
     public Integer getDni() {
         if (usuario instanceof Cliente) {
             return ((Cliente) usuario).getDni();
+        }
+        if(usuario instanceof Empleado) {
+        	 return ((Empleado) usuario).getDni();
         }
         return null; // Retornar null si no es un cliente
     }

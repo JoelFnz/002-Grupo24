@@ -23,6 +23,7 @@ import com.unla.grupo24oo2.repositories.IClienteRepository;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.repositories.IServicioRepository;
 import com.unla.grupo24oo2.repositories.ITicketRepository;
+import com.unla.grupo24oo2.services.IMailService;
 import com.unla.grupo24oo2.services.ITicketService;
 
 @Service
