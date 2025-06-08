@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.entities;
 
+import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

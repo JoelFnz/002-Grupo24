@@ -1,6 +1,7 @@
 package com.unla.grupo24oo2.repositories;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -11,12 +12,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.entities.Cliente;
+import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Ticket;
 
 public interface ITicketRepository  extends JpaRepository<Ticket, Long>{
-	public Ticket findByIdTicket(long idTicket);
+	public Optional<Ticket> findByIdTicket(long idTicket);
 	
-	public Ticket findByNroTicket(String nroTicket);
+	public Optional<Ticket> findByNroTicket(String nroTicket);
 	
 	public Optional<Ticket> findByCliente(Cliente cliente);
 	
@@ -32,4 +34,9 @@ public interface ITicketRepository  extends JpaRepository<Ticket, Long>{
 	Page<Ticket> findByClienteAndFilter(@Param("cliente") Cliente cliente, 
 			@Param("filter") TicketFilterDTO filter, 
 			Pageable pageable);
+	
+	@Query("SELECT t FROM Ticket t JOIN t.empleadosAsignados e WHERE "
+			+ "e = :empleado "
+			+ "AND t.estado.estado != TipoDeEstado.FINALIZADO")
+	public Page<Ticket> findTicketAsociadosByEmpleado(@Param("empleado")Empleado empleado, Pageable pageable);
 }

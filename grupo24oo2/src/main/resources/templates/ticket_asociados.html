@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tickets Asociados</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Tickets Asociados</h2>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Número de Ticket</th>
+                    <th>Fecha de Creación</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ticket : ${tickets.content}">
+                    <td th:text="${ticket.nroTicket}"></td>
+                    <td th:text="${ticket.fechaYHoraDeCreacion}"></td>
+                    <td th:text="${ticket.estado}"></td>
+                    <td>
+                        <a th:href="@{/intervencion/crear(nroEmpleado=${nroEmpleado}, nroTicket=${ticket.nroTicket})}" class="btn btn-primary">Intervención</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:class="${tickets.hasPrevious() ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number - 1})}">Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, tickets.totalPages - 1)}"
+                        th:class="${i == tickets.number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${i})}" th:text="${i + 1}"></a>
+                    </li>
+                    <li class="page-item" th:class="${tickets.hasNext() ? '' : 'disabled'}">
+                        <a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number + 1})}">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

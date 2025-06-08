@@ -1,5 +1,6 @@
 package com.unla.grupo24oo2.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -21,6 +22,7 @@ public class Contacto {
 	
 	private String telefono;
 	
+	@Column(unique = true)
 	private String email;
 	
 	@OneToOne

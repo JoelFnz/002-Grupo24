@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.services.implementation;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,11 +13,13 @@ import com.unla.grupo24oo2.dtos.TicketDTO;
 import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.dtos.TicketResponseDTO;
 import com.unla.grupo24oo2.entities.Cliente;
+import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Estado;
 import com.unla.grupo24oo2.entities.Servicio;
 import com.unla.grupo24oo2.entities.Ticket;
-import com.unla.grupo24oo2.entities.TipoDeEstado;
+import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
 import com.unla.grupo24oo2.repositories.IClienteRepository;
+import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.repositories.IServicioRepository;
 import com.unla.grupo24oo2.repositories.ITicketRepository;
 import com.unla.grupo24oo2.services.ITicketService;
@@ -33,6 +37,9 @@ public class TicketService implements ITicketService {
 
 	@Autowired
 	private IClienteRepository clienteRepository;
+	
+	@Autowired
+	private IEmpleadoRepository empleadoRepository;
 	
 	@Override
 	public TicketResponseDTO crearTicket(TicketDTO ticketDTO) {
@@ -69,6 +76,20 @@ public class TicketService implements ITicketService {
 	    Page<Ticket> tickets = ticketRepository.findByClienteAndFilter(cliente, filter, pageable);
 	    
 	    return tickets.map(ticket -> {
+	    	TicketResponseDTO dto = modelMapper.map(ticket, TicketResponseDTO.class);
+	    	dto.setEstado(ticket.getEstado().getEstado().toString());
+	    	return dto;
+	    });
+	}
+
+	@Override
+	public Page<TicketResponseDTO> obtenerTicketsPorNroEmpleado(String nroEmpleado, Pageable pageable) {
+		Empleado empleado = empleadoRepository.findByNroEmpleado(nroEmpleado)
+				.orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+		
+		Page<Ticket> tickets = ticketRepository.findTicketAsociadosByEmpleado(empleado, pageable);
+		
+		return tickets.map(ticket -> {
 	    	TicketResponseDTO dto = modelMapper.map(ticket, TicketResponseDTO.class);
 	    	dto.setEstado(ticket.getEstado().getEstado().toString());
 	    	return dto;

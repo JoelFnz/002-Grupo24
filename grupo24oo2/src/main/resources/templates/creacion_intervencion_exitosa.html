@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Intervención Creada</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Intervención Creada Exitosamente</h2>
+        <p>La intervención ha sido creada con éxito.</p>
+        <p>Número de Empleado: <span th:text="${intervencion.nroEmpleado}"></span></p>
+        <p>Número de Ticket: <span th:text="${intervencion.nroTicket}"></span></p>
+        <p>Descripción: <span th:text="${intervencion.descripcion}"></span></p>
+        <a class="btn btn-primary" th:href="@{/intervencion/crear(nroEmpleado=${intervencion.nroEmpleado}, nroTicket=${intervencion.nroTicket})}">Crear otra intervención</a>
+    </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.dtos.TicketResponseDTO;
 import com.unla.grupo24oo2.entities.Ticket;
 import com.unla.grupo24oo2.helpers.ViewRouterHelper;
+import com.unla.grupo24oo2.services.IEmpleadoService;
 import com.unla.grupo24oo2.services.IServicioService;
 import com.unla.grupo24oo2.services.ITicketService;
 
@@ -87,4 +89,18 @@ public class TicketController {
 
 	    return mV; 
 	}
+	
+	 @GetMapping("/asociados")
+	 public ModelAndView mostrarTicketsAsociados(
+			 @RequestParam(required = true) String nroEmpleado,
+			 @PageableDefault(size = 5) Pageable pageable) {
+		 ModelAndView mV = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
+
+		 Page<TicketResponseDTO> tickets = ticketService.obtenerTicketsPorNroEmpleado(nroEmpleado, pageable);
+		 
+		 mV.addObject("nroEmpleado", nroEmpleado);
+		 mV.addObject("tickets", tickets);
+
+		 return mV;
+	 }
 }

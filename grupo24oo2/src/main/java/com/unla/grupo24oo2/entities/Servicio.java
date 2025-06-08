@@ -2,6 +2,7 @@ package com.unla.grupo24oo2.entities;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,7 @@ public class Servicio {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long idServicio;
 	
+	@Column(unique = true)
 	private String nombreServicio;
 	
 	private String descripcion;

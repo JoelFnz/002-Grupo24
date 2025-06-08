@@ -2,7 +2,7 @@ package com.unla.grupo24oo2.dtos;
 
 import java.time.LocalDateTime;
 
-import com.unla.grupo24oo2.entities.TipoDeEstado;
+import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
