@@ -33,14 +33,15 @@ public class SecurityConfiguration {
         System.out.println("Entrando a filterChain()");  // Marca cuando se llama a este método
         
         http
-            .authorizeHttpRequests(authz -> {
-                System.out.println("Configurando autorización de rutas");
-                authz
-                	// Rutas públicas (sin login)
-                    .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
-                    //.anyRequest().authenticated()
-                    .anyRequest().permitAll();						// <-- Despues lo cambiamos
-            })
+        .authorizeHttpRequests(authz -> {
+            System.out.println("Configurando autorización de rutas");
+            authz
+                // Rutas públicas (sin login)
+                .requestMatchers("/", "/login", "/clientes/registro","/empleados/registro", "/recuperar-contrasenia", "/restablecer-contrasenia", "/css/**", "/js/**").permitAll()
+                .anyRequest().authenticated(); // Protege el resto de las rutas
+        })
+
+
             .formLogin(form -> {
             	// Configura login con formulario
                 form
