@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.unla.grupo24oo2.security.CustomSuccessHandler;
 import com.unla.grupo24oo2.security.CustomUserDetailsService;
 
 
@@ -48,7 +49,8 @@ public class SecurityConfiguration {
                     .loginProcessingUrl("/perform_login")			// Ruta que Spring intercepta para procesar el login
                     .usernameParameter("email")
                     .passwordParameter("contrasenia")
-                    .defaultSuccessUrl("/tickets/historial", true)	// Pagina a la que redirige tras login exitoso
+                    .successHandler(new CustomSuccessHandler())		// Usamos el manejador en lugar de defaultSuccessUrl
+                    //.defaultSuccessUrl("/tickets/historial", true)	// Pagina a la que redirige tras login exitoso
                     .permitAll();
             })
             .logout(logout -> {

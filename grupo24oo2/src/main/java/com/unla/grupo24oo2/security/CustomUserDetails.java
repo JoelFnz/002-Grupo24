@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Usuario;
 
 import java.util.Collection;
@@ -21,6 +22,16 @@ public class CustomUserDetails implements UserDetails {
         this.usuario = usuario;
         this.rol = rol;
     }
+    
+    // Método para obtener el DNI si el usuario es un cliente
+    public Integer getDni() {
+        if (usuario instanceof Cliente) {
+            return ((Cliente) usuario).getDni();
+        }
+        return null; // Retornar null si no es un cliente
+    }
+
+
 
     // Devuelve los permisos (authorities) del usuario, en este caso un solo rol
     @Override
