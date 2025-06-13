@@ -18,6 +18,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         // Obtener el DNI del cliente
         Integer dniCliente = userDetails.getDni();
         
+        String email = userDetails.getUsername(); 
+
+        // Guardar email en sesión
+        request.getSession().setAttribute("emailCliente", email);
+        
         // Redirigir al historial con el DNI correcto
         response.sendRedirect("/ticket/historial?dniCliente=" + dniCliente);
     }

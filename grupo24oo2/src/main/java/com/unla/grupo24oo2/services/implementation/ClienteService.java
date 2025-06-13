@@ -45,4 +45,9 @@ public class ClienteService implements IClienteService{
 
         return clienteRepository.save(nuevo);
     }
+    
+    @Override
+    public Cliente traerClientePorDni(int dni) {
+        return clienteRepository.findByDni(dni).orElse(null);
+    }
 }

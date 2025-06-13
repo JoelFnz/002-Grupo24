@@ -22,12 +22,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.unla.grupo24oo2.dtos.TicketDTO;
 import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.dtos.TicketResponseDTO;
+import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Ticket;
 import com.unla.grupo24oo2.helpers.ViewRouterHelper;
+import com.unla.grupo24oo2.services.IClienteService;
 import com.unla.grupo24oo2.services.IEmpleadoService;
 import com.unla.grupo24oo2.services.IServicioService;
 import com.unla.grupo24oo2.services.ITicketService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/ticket")
@@ -42,17 +46,30 @@ public class TicketController {
 	@Autowired
 	private IEmpleadoService empleadoService;
 	
+	@Autowired
+	private IClienteService clienteService;
+
+	
 	@GetMapping("/crear/{dni}")
-	public ModelAndView mostrarFormularioTicket(@PathVariable("dni") int dniCliente, Model model) {
-		ModelAndView mV = new ModelAndView(ViewRouterHelper.FORMULARIO_TICKET);
-		
-		TicketDTO ticket = new TicketDTO();
-		ticket.setDniCliente(dniCliente);
-		
-		mV.addObject("ticket", ticket);
-		mV.addObject("servicios", servicioService.traerTodosLosServicios());
-		
-		return mV;
+	public ModelAndView mostrarFormularioTicket(@PathVariable("dni") int dniCliente, Model model, HttpSession session) {  // <- Parametro HttpSession agregado para la session
+	    ModelAndView mV = new ModelAndView(ViewRouterHelper.FORMULARIO_TICKET);
+	    
+	    Cliente cliente = clienteService.traerClientePorDni(dniCliente); //<-- Creo cliente para obtener el email y mostrarlo en la vista
+	    
+	    TicketDTO ticket = new TicketDTO();
+	    ticket.setDniCliente(dniCliente);
+
+	    if (cliente != null && cliente.getContacto() != null) {
+	        String email = cliente.getContacto().getEmail();
+	        session.setAttribute("emailCliente", email); //<-- Guardamos el email en la sesion
+	    } else {
+	        session.setAttribute("emailCliente", null);
+	    }
+
+	    mV.addObject("ticket", ticket);
+	    mV.addObject("servicios", servicioService.traerTodosLosServicios());
+	    
+	    return mV;
 	}
 	
 	@PostMapping("/crear")
