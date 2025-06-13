@@ -12,4 +12,5 @@ public class ViewRouterHelper {
 	public static final String FORMULARIO_INTERVENCION = "formulario_intervencion";
 	public static final String CREACION_INTERVENCION = "creacion_intervencion_exitosa";
 	public static final String ASOCIADOS_TICKET = "ticket_asociados";
+	public static final String MIS_DATOS = "mis_datos";
 }

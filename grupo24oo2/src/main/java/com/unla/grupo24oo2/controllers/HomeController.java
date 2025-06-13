@@ -18,7 +18,7 @@ public class HomeController {
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 	    if (auth != null && auth.getPrincipal() instanceof CustomUserDetails userDetails) {
-            String email = userDetails.getUsername(); // o getUsuario().getContacto().getEmail() si querés ser más explícito
+            String email = userDetails.getUsername();
             Integer dni = userDetails.getDni();
             
             session.setAttribute("emailCliente", email);

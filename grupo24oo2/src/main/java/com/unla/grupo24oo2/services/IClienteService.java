@@ -8,4 +8,8 @@ public interface IClienteService {
 	
 	// Nuevo método
     Cliente traerClientePorDni(int dni);
+    
+    // Nuevo metodo para actualizar los datos del cliente
+    Cliente guardar(Cliente cliente);
+
 }

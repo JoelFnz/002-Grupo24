@@ -28,7 +28,7 @@ public class ClienteService implements IClienteService{
         // Crear Domicilio
         Domicilio domicilio = new Domicilio();
         domicilio.setCalle(dto.getCalle());
-        domicilio.setLocalidad(String.valueOf(dto.getNumero()));
+        domicilio.setLocalidad(dto.getLocalidad());
 
         // Crear Contacto
         Contacto contacto = new Contacto();
@@ -50,4 +50,10 @@ public class ClienteService implements IClienteService{
     public Cliente traerClientePorDni(int dni) {
         return clienteRepository.findByDni(dni).orElse(null);
     }
+    
+    // Nuevo metodo para actualizar datos del cliente
+    public Cliente guardar(Cliente cliente) {
+        return clienteRepository.save(cliente); // Guarda el cliente actualizado en la base de datos
+    }
+
 }

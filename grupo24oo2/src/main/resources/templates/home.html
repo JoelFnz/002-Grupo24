@@ -54,31 +54,47 @@
             <p class="lead fw-normal text-muted mb-0">Seleccione una opción para continuar</p>
         </div>
         <div class="row gx-5 justify-content-center">
-            <!-- Botón: Crear nuevo ticket -->
-            <div class="col-lg-6 col-xl-4 mb-4">
-                <div class="card shadow border-0 h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-ticket-alt fa-4x text-primary mb-4"></i>
-                        <h5 class="card-title mb-3">Crear Nuevo Ticket</h5>
-                        <p class="card-text">Inicie un nuevo ticket para registrar una solicitud o incidencia.</p>
-						<a th:href="@{'/ticket/crear/' + ${session.dniCliente}}" class="btn btn-primary">Nuevo Ticket</a>
-                    </div>
-                </div>
-            </div>
+			<div class="row gx-5 justify-content-center">
 
-            <!-- Botón: Historial de tickets -->
-            <div class="col-lg-6 col-xl-4 mb-4">
-                <div class="card shadow border-0 h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-list fa-4x text-success mb-4"></i>
-                        <h5 class="card-title mb-3">Historial de Tickets</h5>
-                        <p class="card-text">Revise los tickets existentes y su estado.</p>
-						<a th:href="@{'/ticket/historial?dniCliente=' + ${session.dniCliente}}" class="btn btn-success">Ver Historial</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+			    <!-- Crear Nuevo Ticket -->
+			    <div class="col-lg-4 col-md-6 mb-4">
+			        <div class="card shadow border-0 h-100 text-center">
+			            <div class="card-body">
+			                <i class="fas fa-ticket-alt fa-4x text-primary mb-4"></i>
+			                <h5 class="card-title mb-3">Crear Nuevo Ticket</h5>
+			                <p class="card-text">Inicie un nuevo ticket para registrar una solicitud o incidencia.</p>
+			                <a th:href="@{'/ticket/crear/' + ${session.dniCliente}}" class="btn btn-primary">Nuevo Ticket</a>
+			            </div>
+			        </div>
+			    </div>
+
+			    <!-- Historial de Tickets -->
+			    <div class="col-lg-4 col-md-6 mb-4">
+			        <div class="card shadow border-0 h-100 text-center">
+			            <div class="card-body">
+			                <i class="fas fa-list fa-4x text-success mb-4"></i>
+			                <h5 class="card-title mb-3">Historial de Tickets</h5>
+			                <p class="card-text">Revise los tickets existentes y su estado.</p>
+			                <a th:href="@{'/ticket/historial?dniCliente=' + ${session.dniCliente}}" class="btn btn-success">Ver Historial</a>
+			            </div>
+			        </div>
+			    </div>
+
+			    <!-- Mis Datos -->
+			    <div class="col-lg-4 col-md-6 mb-4">
+			        <div class="card shadow border-0 h-100 text-center">
+			            <div class="card-body">
+			                <i class="fas fa-user fa-4x text-info mb-4"></i>
+			                <h5 class="card-title mb-3">Mis Datos</h5>
+			                <p class="card-text">Consulta y gestiona la información de tu cuenta.</p>
+			                <a th:href="@{/clientes/mis_datos}" class="btn btn-info">Ver Mis Datos</a>
+			            </div>
+			        </div>
+			    </div>
+
+			</div>
+
+	
 </header>
 
 <!-- Footer -->
