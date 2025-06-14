@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Crear Intervención</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<title>Crear Intervención</title>
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
-    <div class="container">
-        <h2>Crear Intervención</h2>
-        <form th:action="@{/intervencion/crear}" th:object="${intervencion}" method="post">
-            <div class="form-group">
-                <label for="nroEmpleado">Número de Empleado:</label>
-                <input type="text" class="form-control" id="nroEmpleado" th:field="*{nroEmpleado}" readonly />
-            </div>
-            <div class="form-group">
-                <label for="nroTicket">Número de Ticket:</label>
-                <input type="text" class="form-control" id="nroTicket" th:field="*{nroTicket}" readonly />
-            </div>
-            <div class="form-group">
-                <label for="descripcion">Descripción:</label>
-                <textarea class="form-control" id="descripcion" th:field="*{descripcion}" required></textarea>
-                <div th:if="${#fields.hasErrors('descripcion')}" class="text-danger">
-                    <span th:errors="*{descripcion}">Descripción inválida</span>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Crear Intervención</button>
-            <div th:if="${mensaje}" class="alert alert-danger" role="alert">
-                <p th:text="${mensaje}"></p>
-            </div>
-        </form>
-    </div>
+	<!-- Encabezado de navegacion -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid justify-content-between">
+			<a class="navbar-brand" href="#">Sistema de Tickets</a>
+			<div class="d-flex align-items-center gap-3">
+				<span class="text-white">
+					Usuario: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+				</span>
+				<a th:href="@{/}" class="btn btn-outline-light">
+					<i class="bi bi-house-door"></i> Página principal
+				</a>
+				<form th:action="@{/logout}" method="post" class="m-0">
+					<button type="submit" class="btn btn-danger">
+						<i class="bi bi-box-arrow-right"></i> Cerrar sesión
+					</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h2>Crear Intervención</h2>
+		<form th:action="@{/intervencion/crear}" th:object="${intervencion}" method="post">
+			<div class="form-group">
+				<label for="nroEmpleado">Número de Empleado:</label>
+				<input type="text" class="form-control" id="nroEmpleado" th:field="*{nroEmpleado}" readonly />
+			</div>
+			<div class="form-group">
+				<label for="nroTicket">Número de Ticket:</label>
+				<input type="text" class="form-control" id="nroTicket" th:field="*{nroTicket}" readonly />
+			</div>
+			<div class="form-group">
+				<label for="descripcion">Descripción:</label>
+				<textarea class="form-control" id="descripcion" th:field="*{descripcion}" required></textarea>
+				<div th:if="${#fields.hasErrors('descripcion')}" class="text-danger">
+					<span th:errors="*{descripcion}">Descripción inválida</span>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">Crear Intervención</button>
+			<div th:if="${mensaje}" class="alert alert-danger" role="alert">
+				<p th:text="${mensaje}"></p>
+			</div>
+		</form>
+	</div>
 </body>
+
 </html>

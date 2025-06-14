@@ -1,71 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Tickets Asociados</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-</head>
-<body>
-	
-	<!-- Encabezado de navegacion -->
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			    <div class="container-fluid justify-content-between">
-			        <a class="navbar-brand" href="#">Sistema de Tickets</a>
-			        <div class="d-flex align-items-center gap-3">           
-						<span class="text-white">
-			                Usuario: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
-			            </span>	
-			            <a th:href="@{/}" class="btn btn-outline-light">
-			                <i class="bi bi-house-door"></i> Página principal
-			            </a>
-			            <form th:action="@{/logout}" method="post" class="m-0">
-			                <button type="submit" class="btn btn-danger">
-			                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-			                </button>
-			            </form>
-			        </div>
-			    </div>
-			</nav>
-			
-    <div class="container">
-        <h2>Tickets Asociados</h2>
-        
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Número de Ticket</th>
-                    <th>Fecha de Creación</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ticket : ${tickets.content}">
-                    <td th:text="${ticket.nroTicket}"></td>
-                    <td th:text="${ticket.fechaYHoraDeCreacion}"></td>
-                    <td th:text="${ticket.estado}"></td>
-                    <td>
-                        <a th:href="@{/intervencion/crear(nroEmpleado=${nroEmpleado}, nroTicket=${ticket.nroTicket})}" class="btn btn-primary">Intervención</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
 
-        <div>
-            <nav>
-                <ul class="pagination">
-                    <li class="page-item" th:class="${tickets.hasPrevious() ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number - 1})}">Anterior</a>
-                    </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, tickets.totalPages - 1)}"
-                        th:class="${i == tickets.number ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${i})}" th:text="${i + 1}"></a>
-                    </li>
-                    <li class="page-item" th:class="${tickets.hasNext() ? '' : 'disabled'}">
-                        <a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number + 1})}">Siguiente</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+<head>
+	<title>Tickets Asociados</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+	<!-- Encabezado de navegacion -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid justify-content-between">
+			<a class="navbar-brand" href="#">Sistema de Tickets</a>
+			<div class="d-flex align-items-center gap-3">
+				<span class="text-white">
+					Usuario: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+				</span>
+				<a th:href="@{/}" class="btn btn-outline-light">
+					<i class="bi bi-house-door"></i> Página principal
+				</a>
+				<form th:action="@{/logout}" method="post" class="m-0">
+					<button type="submit" class="btn btn-danger">
+						<i class="bi bi-box-arrow-right"></i> Cerrar sesión
+					</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h2>Tickets Asociados</h2>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Número de Ticket</th>
+					<th>Fecha de Creación</th>
+					<th>Estado</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ticket : ${tickets.content}">
+					<td th:text="${ticket.nroTicket}"></td>
+					<td th:text="${ticket.fechaYHoraDeCreacion}"></td>
+					<td th:text="${ticket.estado}"></td>
+					<td>
+						<a th:href="@{/intervencion/crear(nroEmpleado=${nroEmpleado}, nroTicket=${ticket.nroTicket})}"
+							class="btn btn-primary">Intervención</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div>
+			<nav>
+				<ul class="pagination">
+					<li class="page-item" th:class="${tickets.hasPrevious() ? '' : 'disabled'}">
+						<a class="page-link"
+							th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number - 1})}">Anterior</a>
+					</li>
+					<li class="page-item" th:each="i : ${#numbers.sequence(0, tickets.totalPages - 1)}"
+						th:class="${i == tickets.number ? 'active' : ''}">
+						<a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${i})}"
+							th:text="${i + 1}"></a>
+					</li>
+					<li class="page-item" th:class="${tickets.hasNext() ? '' : 'disabled'}">
+						<a class="page-link"
+							th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number + 1})}">Siguiente</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
 </body>
+
 </html>

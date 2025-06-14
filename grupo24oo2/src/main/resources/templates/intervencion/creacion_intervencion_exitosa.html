@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Intervención Creada</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<title>Intervención Creada</title>
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body>
-    <div class="container">
-        <h2>Intervención Creada Exitosamente</h2>
-        <p>La intervención ha sido creada con éxito.</p>
-        <p>Número de Empleado: <span th:text="${intervencion.nroEmpleado}"></span></p>
-        <p>Número de Ticket: <span th:text="${intervencion.nroTicket}"></span></p>
-        <p>Descripción: <span th:text="${intervencion.descripcion}"></span></p>
-        <a class="btn btn-primary" th:href="@{/intervencion/crear(nroEmpleado=${intervencion.nroEmpleado}, nroTicket=${intervencion.nroTicket})}">Crear otra intervención</a>
-    </div>
+	<!-- Encabezado de navegacion -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid justify-content-between">
+			<a class="navbar-brand" href="#">Sistema de Tickets</a>
+			<div class="d-flex align-items-center gap-3">
+				<span class="text-white">
+					Usuario: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+				</span>
+				<a th:href="@{/}" class="btn btn-outline-light">
+					<i class="bi bi-house-door"></i> Página principal
+				</a>
+				<form th:action="@{/logout}" method="post" class="m-0">
+					<button type="submit" class="btn btn-danger">
+						<i class="bi bi-box-arrow-right"></i> Cerrar sesión
+					</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h2>Intervención Creada Exitosamente</h2>
+		<p>La intervención ha sido creada con éxito.</p>
+		<p>Número de Empleado: <span th:text="${intervencion.nroEmpleado}"></span></p>
+		<p>Número de Ticket: <span th:text="${intervencion.nroTicket}"></span></p>
+		<p>Descripción: <span th:text="${intervencion.descripcion}"></span></p>
+		<a class="btn btn-primary"
+			th:href="@{/intervencion/crear(nroEmpleado=${intervencion.nroEmpleado}, nroTicket=${intervencion.nroTicket})}">Crear
+			otra intervención</a>
+
+	</div>
 </body>
+
 </html>
