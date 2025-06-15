@@ -9,13 +9,19 @@ import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.repositories.IClienteRepository;
+import com.unla.grupo24oo2.repositories.ITicketRepository;
 import com.unla.grupo24oo2.services.IClienteService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ClienteService implements IClienteService{
 
     @Autowired
     private IClienteRepository clienteRepository;
+    
+    @Autowired
+    private ITicketRepository ticketRepository;
     
     @Autowired
     private PasswordEncoder passwordEncoder;	//<-- Agregado
@@ -55,5 +61,14 @@ public class ClienteService implements IClienteService{
     public Cliente guardar(Cliente cliente) {
         return clienteRepository.save(cliente); // Guarda el cliente actualizado en la base de datos
     }
+    
+    // Nuevo metodo para eliminar cuenta
+    @Transactional // Para asegurar que toda la operacion se complete correctamente
+    public void eliminar(Cliente cliente) {
+    	ticketRepository.deleteByCliente(cliente); // Elimina los tickets antes de borrar el cliente
+        clienteRepository.delete(cliente); //  Elimina de la base de datos
+    }
+    
+    
 
 }

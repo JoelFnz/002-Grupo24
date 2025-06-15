@@ -13,4 +13,8 @@ public class ViewRouterHelper {
 	public static final String CREACION_INTERVENCION = "intervencion/creacion_intervencion_exitosa";
 	public static final String ASOCIADOS_TICKET = "ticket/ticket_asociados";
 	public static final String MIS_DATOS = "perfil/mis_datos";
+	public static final String SEGURIDAD = "seguridad/seguridad";
+	public static final String CAMBIAR_CONTRASENIA = "seguridad/cambiar_contrasenia";
+	public static final String ELIMINAR_CUENTA = "seguridad/eliminar_cuenta";
+	
 }

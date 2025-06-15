@@ -39,4 +39,7 @@ public interface ITicketRepository  extends JpaRepository<Ticket, Long>{
 			+ "e = :empleado "
 			+ "AND t.estado.estado != TipoDeEstado.FINALIZADO")
 	public Page<Ticket> findTicketAsociadosByEmpleado(@Param("empleado")Empleado empleado, Pageable pageable);
+	
+	// Nuevo metodo para eliminar tickets de un cliente
+	void deleteByCliente(Cliente cliente);
 }

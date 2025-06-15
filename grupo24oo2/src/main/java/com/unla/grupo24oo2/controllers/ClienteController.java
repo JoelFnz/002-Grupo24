@@ -23,7 +23,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
- // Mostrar formulario de registro
+    // Mostrar formulario de registro
     @GetMapping("/registro")
     public ModelAndView mostrarFormularioRegistro() {
         ModelAndView mAV = new ModelAndView(ViewRouterHelper.REGISTRO);
@@ -31,7 +31,7 @@ public class ClienteController {
         return mAV;
     }
 
- // Procesar el formulario enviado
+    // Procesar el formulario enviado
     @PostMapping("/registro")
     public ModelAndView procesarFormulario(@ModelAttribute("cliente") ClienteRegistroDTO dto) {
         clienteService.registrarCliente(dto);
@@ -40,10 +40,29 @@ public class ClienteController {
         return mAV;
     }
     
- // Mostrar mis datos
+    // Mostrar mis datos
     @GetMapping("/mis_datos")
     public String verMisDatos() {
         return (ViewRouterHelper.MIS_DATOS);
     }
+ 
+    // Mostrar opciones de seguridad
+    @GetMapping("/seguridad")
+    public String mostrarSeguridad() {
+        return (ViewRouterHelper.SEGURIDAD);
+    }
+ 
+ 	// Mostrar cambiar contraseña
+    @GetMapping("/cambiar_contrasenia")
+    public String mostrarCambioContrasenia() {
+        return (ViewRouterHelper.CAMBIAR_CONTRASENIA);
+    }
+    
+    // Mostrar eliminar cuenta
+    @GetMapping("/eliminar_cuenta")
+    public String mostrarEliminarCuenta() {
+        return (ViewRouterHelper.ELIMINAR_CUENTA);
+    }
+
 
 }

@@ -11,5 +11,9 @@ public interface IClienteService {
     
     // Nuevo metodo para actualizar los datos del cliente
     Cliente guardar(Cliente cliente);
+    
+    //  Nuevo metodo para eliminar la cuenta del cliente
+    void eliminar(Cliente cliente);
+
 
 }
