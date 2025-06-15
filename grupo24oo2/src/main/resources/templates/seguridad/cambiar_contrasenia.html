@@ -15,6 +15,10 @@
     <div class="container-fluid justify-content-between">
         <a class="navbar-brand" href="#">Sistema de Tickets</a>
         <div class="d-flex align-items-center gap-3">
+			<span class="text-white">
+				<span th:text="${session.rolUsuario} ?: 'Invitado'"></span>
+				: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+			</span>
             <a th:href="@{/}" class="btn btn-outline-light">
                 <i class="bi bi-house-door"></i> Página principal
             </a>
@@ -55,11 +59,11 @@
 <!-- Scripts -->
 <script>
 	document.getElementById("cancelarCambio").addEventListener("click", () => {
-	    window.location.href = "/clientes/seguridad"; // 🔥 Redirige a la página de seguridad
+	    window.location.href = "/clientes/seguridad"; //  Redirige a la página de seguridad
 	});
 
 	document.getElementById("formCambiarContrasenia").addEventListener("submit", (event) => {
-	    event.preventDefault(); // 🔥 Evita el envío tradicional
+	    event.preventDefault(); // Evita el envío tradicional
 
 	    const datos = {
 	        contraseniaActual: document.getElementById("contraseniaActual").value,
@@ -67,7 +71,7 @@
 	        confirmarNuevaContrasenia: document.getElementById("confirmarNuevaContrasenia").value
 	    };
 
-	    const dniCliente = Number("[[${session.dniCliente}]]"); // 🔥 Convertir a número antes de validar
+	    const dniCliente = Number("[[${session.dniCliente}]]"); // Convertir a número antes de validar
 
 	    if (!dniCliente || isNaN(dniCliente)) {
 	        console.error("DNI no válido:", dniCliente);
@@ -75,15 +79,15 @@
 	        return;
 	    }
 
-	    fetch(`/api/clientes/cambiar_contrasenia/${dniCliente}`, { // 🔥 Usar dniCliente en la URL
+	    fetch(`/api/clientes/cambiar_contrasenia/${dniCliente}`, { // Usar dniCliente en la URL
 	        method: "PUT",
 	        headers: { "Content-Type": "application/json" },
 	        body: JSON.stringify(datos)
 	    })
 	    .then(response => response.ok ? response.text() : Promise.reject("Error al cambiar la contraseña"))
 	    .then(mensaje => {
-	        alert(mensaje); // 🔥 Muestra mensaje de éxito
-	        window.location.href = "/clientes/seguridad"; // 🔥 Redirige a seguridad después de cambiar la contraseña
+	        alert(mensaje); // Muestra mensaje de éxito
+	        window.location.href = "/clientes/seguridad"; // Redirige a seguridad después de cambiar la contraseña
 	    })
 	    .catch(error => console.error("Error:", error));
 	});

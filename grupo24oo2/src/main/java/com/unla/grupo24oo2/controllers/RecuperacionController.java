@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.unla.grupo24oo2.entities.Usuario;
+import com.unla.grupo24oo2.helpers.ViewRouterHelper;
 import com.unla.grupo24oo2.services.IMailService;
 import com.unla.grupo24oo2.services.IUsuarioService;
 
@@ -23,12 +24,12 @@ public class RecuperacionController {
     //  Metodo GET para mostrar el formulario de recuperación
     @GetMapping("/recuperar-contrasenia")
     public ModelAndView mostrarFormulario() {
-        return new ModelAndView("recuperar_contrasenia");
+        return new ModelAndView(ViewRouterHelper.RECUPERAR_CONTRASENIA);
     }
 
     @GetMapping("/restablecer-contrasenia")
     public ModelAndView mostrarFormularioRestablecimiento(@RequestParam String token) {
-        ModelAndView mV = new ModelAndView("restablecer_contrasenia");
+        ModelAndView mV = new ModelAndView(ViewRouterHelper.RESTABLECER_CONTRASENIA);;
 
         // Validar el token antes de mostrar el formulario
         if (!usuarioService.validarTokenRecuperacion(token)) {
@@ -43,7 +44,7 @@ public class RecuperacionController {
     
     @PostMapping("/recuperar-contrasenia")
     public ModelAndView procesarRecuperacion(@RequestParam String email) {
-        ModelAndView mV = new ModelAndView("recuperar_contrasenia");
+        ModelAndView mV = new ModelAndView(ViewRouterHelper.RECUPERAR_CONTRASENIA);
 
         // Buscar usuario por email
         Usuario usuario = usuarioService.buscarPorEmail(email);
@@ -73,7 +74,7 @@ public class RecuperacionController {
         if (usuarioService.actualizarContrasenia(token, nuevaContrasenia)) {
             mV.addObject("mensaje", "Tu contraseña ha sido actualizada correctamente. Ahora puedes iniciar sesión.");
         } else {
-            mV.setViewName("restablecer_contrasenia");
+            mV.setViewName(ViewRouterHelper.RESTABLECER_CONTRASENIA);
             mV.addObject("mensaje", "Error al cambiar la contraseña.");
         }
 

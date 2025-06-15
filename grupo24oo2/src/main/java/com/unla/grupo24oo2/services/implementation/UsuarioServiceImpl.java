@@ -47,7 +47,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
         Usuario usuario = usuarioRepository.findByEmail(email);
 
-        // 🔥 Encriptar la nueva contraseña antes de guardarla
+        // Encriptar la nueva contraseña antes de guardarla
         usuario.setContrasenia(passwordEncoder.encode(nuevaContrasenia));
         usuarioRepository.save(usuario);
 

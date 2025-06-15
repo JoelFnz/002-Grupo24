@@ -15,6 +15,10 @@
     <div class="container-fluid justify-content-between">
         <a class="navbar-brand" href="#">Sistema de Tickets</a>
         <div class="d-flex align-items-center gap-3">
+			<span class="text-white">
+				<span th:text="${session.rolUsuario} ?: 'Invitado'"></span>
+				: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+			</span>
             <a th:href="@{/}" class="btn btn-outline-light">
                 <i class="bi bi-house-door"></i> Página principal
             </a>
@@ -48,11 +52,11 @@
 <!-- Scripts -->
 <script>
     document.getElementById("cancelarEliminar").addEventListener("click", () => {
-        window.location.href = "/clientes/seguridad"; // 🔥 Redirige a seguridad si se cancela
+        window.location.href = "/clientes/seguridad"; // Redirige a seguridad si se cancela
     });
 
     document.getElementById("confirmarEliminar").addEventListener("click", () => {
-        const dniCliente = Number("[[${session.dniCliente}]]"); // 🔥 Obtener el DNI correctamente
+        const dniCliente = Number("[[${session.dniCliente}]]"); // Obtener el DNI correctamente
 
         if (!dniCliente || isNaN(dniCliente)) {
             console.error("DNI no válido:", dniCliente);
@@ -69,8 +73,8 @@
         })
         .then(response => response.ok ? response.text() : Promise.reject("Error al eliminar la cuenta"))
         .then(mensaje => {
-            alert(mensaje); // 🔥 Mensaje de éxito
-            window.location.href = "/logout"; // 🔥 Cierra sesión tras la eliminación
+            alert(mensaje); // Mensaje de éxito
+            window.location.href = "/logout"; // Cierra sesión tras la eliminación
         })
         .catch(error => console.error("Error:", error));
     });

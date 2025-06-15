@@ -30,7 +30,8 @@
 			<a class="navbar-brand" href="#">Sistema de Tickets</a>
 			<div class="d-flex align-items-center gap-3">
 				<span class="text-white">
-					Usuario: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+					<span th:text="${session.rolUsuario} ?: 'Invitado'"></span>
+					: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
 				</span>
 				<a th:href="@{/}" class="btn btn-outline-light">
 					<i class="bi bi-house-door"></i> Página principal
