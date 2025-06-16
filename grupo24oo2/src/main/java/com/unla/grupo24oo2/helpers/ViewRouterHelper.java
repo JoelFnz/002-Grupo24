@@ -18,4 +18,6 @@ public class ViewRouterHelper {
 	public static final String ELIMINAR_CUENTA = "seguridad/eliminar_cuenta";
 	public static final String RECUPERAR_CONTRASENIA = "login/recuperar_contrasenia";
 	public static final String RESTABLECER_CONTRASENIA  = "login/restablecer_contrasenia";
+	public static final String ADMIN_HOME = "home/admin_home";
+
 }

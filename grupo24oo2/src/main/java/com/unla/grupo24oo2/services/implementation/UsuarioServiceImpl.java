@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import com.unla.grupo24oo2.dtos.IUsuarioRegistroDTO;
+import com.unla.grupo24oo2.entities.Administrador;
+import com.unla.grupo24oo2.entities.Contacto;
+import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.entities.Usuario;
 import com.unla.grupo24oo2.repositories.IUsuarioRepository;
 import com.unla.grupo24oo2.services.IUsuarioService;
@@ -54,4 +59,36 @@ public class UsuarioServiceImpl implements IUsuarioService {
         tokenStorage.remove(token); // Eliminamos el token después de usarlo
         return true;
     }
+    
+    @Override
+    public Administrador registrarAdministrador(IUsuarioRegistroDTO dto) {
+        Usuario usuarioExistente = usuarioRepository.findByEmail(dto.email());
+
+        if (usuarioExistente != null) { // 🔥 Verificación sin modificar findByEmail()
+            throw new RuntimeException("Ya existe un administrador con ese email.");
+        }
+
+        // Crear Domicilio
+        Domicilio domicilio = new Domicilio();
+        domicilio.setCalle(dto.calle());
+        domicilio.setLocalidad(dto.localidad());
+
+        // Crear Contacto
+        Contacto contacto = new Contacto();
+        contacto.setTelefono(dto.telefono());
+        contacto.setEmail(dto.email());
+
+        // Hashear contraseña antes de guardar
+        String contraseniaHasheada = passwordEncoder.encode(dto.contrasenia());
+
+        // Crear Administrador y asignar domicilio y contacto
+        Administrador nuevoAdmin = new Administrador(dto.nombre(), contraseniaHasheada, domicilio, contacto, dto.dni());
+
+        // Establecer relación inversa
+        domicilio.setUsuario(nuevoAdmin);
+        contacto.setUsuario(nuevoAdmin);
+
+        return usuarioRepository.save(nuevoAdmin);
+    }
+
 }

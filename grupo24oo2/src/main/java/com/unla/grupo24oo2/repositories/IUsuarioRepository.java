@@ -10,4 +10,5 @@ import com.unla.grupo24oo2.entities.Usuario;
 public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query("SELECT u FROM Usuario u WHERE u.contacto.email = :email")
     Usuario findByEmail(@Param("email") String email);
+    
 }

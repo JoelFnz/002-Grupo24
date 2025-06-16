@@ -53,7 +53,8 @@ public class SecurityConfiguration {
                     .usernameParameter("email")
                     .passwordParameter("contrasenia")
                     //.successHandler(new CustomSuccessHandler())		// Usamos el manejador en lugar de defaultSuccessUrl
-                    .defaultSuccessUrl("/", true)	// Pagina a la que redirige tras login exitoso
+                    .successHandler(new CustomSuccessHandler()) //  Agregar el nuevo manejador de éxito
+                    //.defaultSuccessUrl("/", true)	// Pagina a la que redirige tras login exitoso
                     .permitAll();
             })
             .logout(logout -> {

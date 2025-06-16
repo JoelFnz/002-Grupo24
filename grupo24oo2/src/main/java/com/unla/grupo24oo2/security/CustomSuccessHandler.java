@@ -1,29 +1,26 @@
 package com.unla.grupo24oo2.security;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 import java.io.IOException;
 
-public class CustomSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
-        // Obtener el usuario autenticado
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        
-        // Obtener el DNI del cliente
-        Integer dniCliente = userDetails.getDni();
-        
-        String email = userDetails.getUsername(); 
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        String targetUrl = determineTargetUrl(authentication);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    }
 
-        // Guardar email en sesión
-        request.getSession().setAttribute("emailCliente", email);
-        
-        // Redirigir al historial con el DNI correcto
-        response.sendRedirect("/ticket/historial?dniCliente=" + dniCliente);
+    private String determineTargetUrl(Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+        return isAdmin ? "/admin/home" : "/";
     }
 }

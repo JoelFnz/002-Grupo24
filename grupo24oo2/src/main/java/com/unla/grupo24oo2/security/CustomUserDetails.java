@@ -40,8 +40,9 @@ public class CustomUserDetails implements UserDetails {
     // Devuelve los permisos (authorities) del usuario, en este caso un solo rol
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + rol));
+        return Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol().getPrefixedName()));
     }
+
     
     // Devuelve la contraseña del usuario (ya encriptada con BCrypt)
     @Override
