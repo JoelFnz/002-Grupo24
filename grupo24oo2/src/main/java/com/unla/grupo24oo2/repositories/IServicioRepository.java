@@ -10,4 +10,6 @@ import com.unla.grupo24oo2.entities.Servicio;
 public interface IServicioRepository extends JpaRepository<Servicio, Long>{
 	Optional<Servicio> findByNombreServicio(String nombreServicio);
 	List<Servicio> findAll();
+	boolean existsByNombreServicio(String nombreServicio);
+	
 }

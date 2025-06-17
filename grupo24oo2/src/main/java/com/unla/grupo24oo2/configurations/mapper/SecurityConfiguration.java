@@ -38,7 +38,7 @@ public class SecurityConfiguration {
             authz
                 // Rutas públicas (sin login)
                 .requestMatchers("/login", "/clientes/registro","/empleados/registro", "/recuperar-contrasenia", "/restablecer-contrasenia", "/css/**", "/js/**").permitAll()
-                .requestMatchers("/api/clientes/**").authenticated()
+                .requestMatchers("/api/clientes/**", "/servicio/**").authenticated()
                 .anyRequest().authenticated(); // Protege el resto de las rutas
                 //anyRequest().permitAll();
         })
