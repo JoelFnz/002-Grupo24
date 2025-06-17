@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 	<meta charset="UTF-8" />
@@ -113,8 +114,20 @@
 					    </div>
 					</div>
 
-				</div>
-
+					
+					    <!-- Servicio - Solo empleados ven esto -->
+					    <div sec:authorize="hasRole('EMPLEADO')" class="col-lg-4 col-md-6 mb-4">
+					        <div class="card shadow border-0 h-100 text-center">
+					            <div class="card-body">
+					                <i class="fas fa-plus-circle fa-4x text-success mb-4"></i>
+					                <h5 class="card-title mb-3">Ofrecer Servicio</h5>
+					                <p class="card-text">Crea o asociate a un servicio existente.</p>
+					                <a th:href="@{/servicio/ofrecer}" class="btn btn-success">Ofrecer Servicio</a>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+				
 
 	</header>
 
