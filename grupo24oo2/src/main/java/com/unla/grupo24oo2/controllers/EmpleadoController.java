@@ -35,4 +35,16 @@ public class EmpleadoController {
     public String listarEmpleados() {
         return (ViewRouterHelper.LISTA_EMPLEADOS);
     }
+    
+    // Mostrar eliminar cuenta
+    @GetMapping("/eliminar_cuenta")
+    public String mostrarEliminarCuenta() {
+        return (ViewRouterHelper.ELIMINAR_CUENTA);
+    }
+    
+    // Mostrar cambiar contraseña
+    @GetMapping("/cambiar_contrasenia")
+    public String mostrarCambioContrasenia() {
+        return (ViewRouterHelper.CAMBIAR_CONTRASENIA);
+    }
 }

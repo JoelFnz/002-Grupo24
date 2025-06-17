@@ -12,8 +12,11 @@ import com.unla.grupo24oo2.entities.Administrador;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.entities.Usuario;
+import com.unla.grupo24oo2.exceptions.NoRegisterFoundException;
 import com.unla.grupo24oo2.repositories.IUsuarioRepository;
 import com.unla.grupo24oo2.services.IUsuarioService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
@@ -89,6 +92,27 @@ public class UsuarioServiceImpl implements IUsuarioService {
         contacto.setUsuario(nuevoAdmin);
 
         return usuarioRepository.save(nuevoAdmin);
+    }
+    
+    @Override
+	public Administrador traerAdministradorPorDni(int dni){
+		try {
+			return usuarioRepository.findByDni(dni).orElseThrow(() -> new NoRegisterFoundException("El Administrador no existe"));
+		} catch (NoRegisterFoundException e) {
+			//e.printStackTrace();
+			return null;
+		}
+	}
+    
+    @Override
+    @Transactional // Para asegurar que la eliminación sea segura
+    public void eliminar(Administrador administrador) {
+    	usuarioRepository.delete(administrador); // Elimina al administrador de la base de datos
+    }
+	
+	// Nuevo metodo para actualizar datos del administrador
+    public Administrador guardar(Administrador administrador) {
+        return usuarioRepository.save(administrador); // Guarda el administrador actualizado en la base de datos
     }
 
 }

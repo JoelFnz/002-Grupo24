@@ -11,5 +11,8 @@ public interface IUsuarioService {
     boolean validarTokenRecuperacion(String token);
     boolean actualizarContrasenia(String token, String nuevaContrasenia);
 	Administrador registrarAdministrador(IUsuarioRegistroDTO dto);
+	Administrador traerAdministradorPorDni(int dni);
+	Administrador guardar(Administrador administrador);
+    void eliminar(Administrador administrador);
 	
 }

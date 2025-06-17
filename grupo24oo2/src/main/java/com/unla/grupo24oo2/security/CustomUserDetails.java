@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.unla.grupo24oo2.entities.Administrador;
 import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Usuario;
@@ -15,65 +16,68 @@ import java.util.Collections;
 //Representa al usuario autenticado del sistema
 public class CustomUserDetails implements UserDetails {
 
-    private final Usuario usuario;
-    private final String rol;
-    
-    // Constructor que recibe el usuario y su rol
-    public CustomUserDetails(Usuario usuario, String rol) {
-        this.usuario = usuario;
-        this.rol = rol;
-    }
-    
-    // Método para obtener el DNI si el usuario es un cliente
-    public Integer getDni() {
-        if (usuario instanceof Cliente) {
-            return ((Cliente) usuario).getDni();
-        }
-        if(usuario instanceof Empleado) {
-        	 return ((Empleado) usuario).getDni();
-        }
-        return null; // Retornar null si no es un cliente
-    }
+	private final Usuario usuario;
+	private final String rol;
 
+	// Constructor que recibe el usuario y su rol
+	public CustomUserDetails(Usuario usuario, String rol) {
+		this.usuario = usuario;
+		this.rol = rol;
+	}
 
+	// Método para obtener el DNI si el usuario es un cliente
+	public Integer getDni() {
+		if (usuario instanceof Cliente) {
+			return ((Cliente) usuario).getDni();
+		}
+		if (usuario instanceof Empleado) {
+			return ((Empleado) usuario).getDni();
+		}
 
-    // Devuelve los permisos (authorities) del usuario, en este caso un solo rol
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol().getPrefixedName()));
-    }
+		if (usuario instanceof Administrador) {
+			return ((Administrador) usuario).getDni();
+		}
 
-    
-    // Devuelve la contraseña del usuario (ya encriptada con BCrypt)
-    @Override
-    public String getPassword() {
-        return usuario.getContrasenia();
-    }
+		return null; // Retornar null si no es un cliente
+	}
 
-    // Devuelve el nombre de usuario que se va a usar para el login (en este caso el email)
-    @Override
-    public String getUsername() {
-        return usuario.getContacto().getEmail();
-    }
+	// Devuelve los permisos (authorities) del usuario, en este caso un solo rol
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol().getPrefixedName()));
+	}
 
-    // Flags para indicar que la cuenta esta activa y valida
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+	// Devuelve la contraseña del usuario (ya encriptada con BCrypt)
+	@Override
+	public String getPassword() {
+		return usuario.getContrasenia();
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+	// Devuelve el nombre de usuario que se va a usar para el login (en este caso el
+	// email)
+	@Override
+	public String getUsername() {
+		return usuario.getContacto().getEmail();
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	// Flags para indicar que la cuenta esta activa y valida
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

@@ -76,6 +76,11 @@ public class EmpleadoService implements IEmpleadoService {
     public void eliminar(Empleado empleado) {
         empleadoRepository.delete(empleado); // Elimina al empleado de la base de datos
     }
+	
+	// Nuevo metodo para actualizar datos del empleado
+    public Empleado guardar(Empleado empleado) {
+        return empleadoRepository.save(empleado); // Guarda el empleado actualizado en la base de datos
+    }
 
 	
 }
