@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.services;
 
+import java.util.List;
+
 import com.unla.grupo24oo2.dtos.ClienteRegistroDTO;
 import com.unla.grupo24oo2.entities.Cliente;
 
@@ -12,8 +14,11 @@ public interface IClienteService {
     // Nuevo metodo para actualizar los datos del cliente
     Cliente guardar(Cliente cliente);
     
-    //  Nuevo metodo para eliminar la cuenta del cliente
+    // Nuevo metodo para eliminar la cuenta del cliente
     void eliminar(Cliente cliente);
 
+    // Nuevo método para obtener todos los clientes
+    List<Cliente> obtenerTodosLosClientes();
 
+    
 }

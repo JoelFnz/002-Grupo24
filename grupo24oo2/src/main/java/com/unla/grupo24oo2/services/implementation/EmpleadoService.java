@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.services.implementation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import com.unla.grupo24oo2.exceptions.NoRegisterFoundException;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.services.IEmpleadoService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class EmpleadoService implements IEmpleadoService {
 
@@ -22,18 +26,20 @@ public class EmpleadoService implements IEmpleadoService {
     private PasswordEncoder passwordEncoder;	//<-- Agregado
 
     public Empleado registrarEmpleado(EmpleadoRegistroDTO dto) {
-        if (empleadoRepository.findByNroEmpleado(dto.getNroEmpleado()).isPresent()) {
-            throw new RuntimeException("Ya existe un empleado con ese número.");
-        }
-        
         if (empleadoRepository.findByDni(dto.getDni()).isPresent()) {
             throw new RuntimeException("Ya existe un empleado con ese DNI.");
         }
+        
+        // Obtener el ultimo número de empleado registrado
+        String ultimoNroEmpleado = empleadoRepository.findUltimoNroEmpleado();
+        int nuevoNumero = (ultimoNroEmpleado != null) ? Integer.parseInt(ultimoNroEmpleado.substring(3)) + 1 : 1;
+        String nroEmpleadoGenerado = String.format("LE-%05d", nuevoNumero);
+
 
         // Crear Domicilio
         Domicilio domicilio = new Domicilio();
         domicilio.setCalle(dto.getCalle());
-        domicilio.setLocalidad(String.valueOf(dto.getNumero()));
+        domicilio.setLocalidad(dto.getLocalidad());
 
         // Crear Contacto
         Contacto contacto = new Contacto();
@@ -42,7 +48,7 @@ public class EmpleadoService implements IEmpleadoService {
 
         // Crear Empleado y asociar domicilio y contacto
         String contraseniaHasheada = passwordEncoder.encode(dto.getContrasenia()); // <-- Agregado
-        Empleado nuevo = new Empleado(dto.getNroEmpleado(),dto.getDni(), dto.getNombre(), contraseniaHasheada, domicilio, contacto);
+        Empleado nuevo = new Empleado(nroEmpleadoGenerado ,dto.getDni(), dto.getNombre(), contraseniaHasheada, domicilio, contacto);
 
         domicilio.setUsuario(nuevo);
         contacto.setUsuario(nuevo);
@@ -59,4 +65,17 @@ public class EmpleadoService implements IEmpleadoService {
 			return null;
 		}
 	}
+	
+	@Override
+    public List<Empleado> obtenerTodosLosEmpleados() {
+        return empleadoRepository.findAll(); // Recupera todos los empleados desde la base de datos
+    }
+
+	@Override
+    @Transactional // Para asegurar que la eliminación sea segura
+    public void eliminar(Empleado empleado) {
+        empleadoRepository.delete(empleado); // Elimina al empleado de la base de datos
+    }
+
+	
 }

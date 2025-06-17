@@ -19,5 +19,7 @@ public class ViewRouterHelper {
 	public static final String RECUPERAR_CONTRASENIA = "login/recuperar_contrasenia";
 	public static final String RESTABLECER_CONTRASENIA  = "login/restablecer_contrasenia";
 	public static final String ADMIN_HOME = "home/admin_home";
-
+	public static final String LISTA_CLIENTES = "usuarios/lista_clientes";
+	public static final String LISTA_EMPLEADOS = "usuarios/lista_empleados";
+	public static final String REGISTRO_EXITOSO_EMPLEADO = "registro/registro_exitoso_empleado";
 }

@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.restcontrollers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,5 +101,24 @@ public class ClienteRestController {
         clienteService.eliminar(cliente); // Llamar al método de eliminación
         return ResponseEntity.ok("Cuenta eliminada correctamente.");
     }
+    
+    @GetMapping("/lista")
+    public ResponseEntity<List<ClienteDTO>> obtenerTodosLosClientes() {
+        List<Cliente> clientes = clienteService.obtenerTodosLosClientes();
+        
+        if (clientes.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Devuelve 204 si no hay clientes
+        }
+
+        List<ClienteDTO> dtos = clientes.stream().map(cliente -> 
+            new ClienteDTO(cliente.getIdUsuario(), cliente.getNombre(), cliente.getDni(), 
+                           cliente.getDomicilio().getCalle(), cliente.getDomicilio().getLocalidad(), 
+                           cliente.getContacto().getEmail(), cliente.getContacto().getTelefono()))
+        .toList();
+
+        return ResponseEntity.ok(dtos); // Devuelve la lista de clientes en formato JSON
+    }
+    
+    
 
 }

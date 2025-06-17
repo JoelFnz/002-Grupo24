@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.services.implementation;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,6 +71,11 @@ public class ClienteService implements IClienteService{
         clienteRepository.delete(cliente); //  Elimina de la base de datos
     }
     
+    @Override
+    public List<Cliente> obtenerTodosLosClientes() {
+        return clienteRepository.findAll(); // Obtiene la lista de clientes desde el repositorio
+    }
+
     
 
 }

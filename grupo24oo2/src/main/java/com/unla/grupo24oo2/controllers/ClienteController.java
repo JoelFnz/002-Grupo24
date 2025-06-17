@@ -63,6 +63,10 @@ public class ClienteController {
     public String mostrarEliminarCuenta() {
         return (ViewRouterHelper.ELIMINAR_CUENTA);
     }
-
+    
+    @GetMapping("/lista_clientes")
+    public String listarClientes() {
+        return (ViewRouterHelper.LISTA_CLIENTES);
+    }
 
 }
