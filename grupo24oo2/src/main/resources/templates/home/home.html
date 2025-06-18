@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 	<meta charset="UTF-8" />
@@ -36,7 +35,7 @@
 		<div class="container-fluid justify-content-between">
 			<a class="navbar-brand" href="#">Sistema de Tickets</a>
 			<div class="d-flex align-items-center gap-3">
-				
+
 				<span class="text-white">
 					<span th:text="${session.rolUsuario} ?: 'Invitado'"></span>
 					: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
@@ -63,8 +62,8 @@
 			<div class="row gx-5 justify-content-center">
 				<div class="row gx-5 justify-content-center">
 
-					<!-- Crear Nuevo Ticket -->
-					<div class="col-lg-4 col-md-6 mb-4">
+					<!-- Crear Nuevo Ticket - Solo clientes -->
+					<div sec:authorize="hasRole('CLIENTE')" class="col-lg-4 col-md-6 mb-4">
 						<div class="card shadow border-0 h-100 text-center">
 							<div class="card-body">
 								<i class="fas fa-ticket-alt fa-4x text-primary mb-4"></i>
@@ -77,8 +76,8 @@
 						</div>
 					</div>
 
-					<!-- Historial de Tickets -->
-					<div class="col-lg-4 col-md-6 mb-4">
+					<!-- Historial de Tickets - Solo clientes -->
+					<div sec:authorize="hasRole('CLIENTE')" class="col-lg-4 col-md-6 mb-4">
 						<div class="card shadow border-0 h-100 text-center">
 							<div class="card-body">
 								<i class="fas fa-list fa-4x text-success mb-4"></i>
@@ -101,34 +100,44 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<!-- Seguridad -->
 					<div class="col-lg-4 col-md-6 mb-4">
-					    <div class="card shadow border-0 h-100 text-center">
-					        <div class="card-body">
-					            <i class="fas fa-shield-alt fa-4x text-warning mb-4"></i>
-					            <h5 class="card-title mb-3">Seguridad</h5>
-					            <p class="card-text">Gestiona tu seguridad, cambia tu contraseña o elimina tu cuenta.</p>
-					            <a th:href="@{/clientes/seguridad}" class="btn btn-warning">Opciones de Seguridad</a>
-					        </div>
-					    </div>
+						<div class="card shadow border-0 h-100 text-center">
+							<div class="card-body">
+								<i class="fas fa-shield-alt fa-4x text-warning mb-4"></i>
+								<h5 class="card-title mb-3">Seguridad</h5>
+								<p class="card-text">Gestiona tu seguridad, cambia tu contraseña o elimina tu cuenta.
+								</p>
+								<a th:href="@{/clientes/seguridad}" class="btn btn-warning">Opciones de Seguridad</a>
+							</div>
+						</div>
 					</div>
 
-					
-					    <!-- Servicio - Solo empleados ven esto -->
-					    <div sec:authorize="hasRole('EMPLEADO')" class="col-lg-4 col-md-6 mb-4">
-					        <div class="card shadow border-0 h-100 text-center">
-					            <div class="card-body">
-					                <i class="fas fa-plus-circle fa-4x text-success mb-4"></i>
-					                <h5 class="card-title mb-3">Ofrecer Servicio</h5>
-					                <p class="card-text">Crea o asociate a un servicio existente.</p>
-					                <a th:href="@{/servicio/ofrecer}" class="btn btn-success">Ofrecer Servicio</a>
-					            </div>
-					        </div>
-					    </div>
+					<!-- Mis Tickets - Solo empleados -->
+					<div sec:authorize="hasRole('EMPLEADO')" class="col-lg-4 col-md-6 mb-4">
+						<div class="card shadow border-0 h-100 text-center">
+							<div class="card-body">
+								<i class="bi bi-inbox-fill fa-4x text-success mb-4"></i>
+								<h5 class="card-title mb-3">Mis Tickets Asignados</h5>
+								<p class="card-text">Visualizá los tickets activos asociados a tus servicios.</p>
+								<a th:href="@{/ticket/empleado/mis-tickets}" class="btn btn-success">Administrar</a>
+							</div>
+						</div>
 					</div>
-				
 
+					<!-- Servicio - Solo empleados -->
+					<div sec:authorize="hasRole('EMPLEADO')" class="col-lg-4 col-md-6 mb-4">
+						<div class="card shadow border-0 h-100 text-center">
+							<div class="card-body">
+								<i class="fas fa-plus-circle fa-4x text-success mb-4"></i>
+								<h5 class="card-title mb-3">Ofrecer Servicio</h5>
+								<p class="card-text">Crea o asociate a un servicio existente.</p>
+								<a th:href="@{/servicio/ofrecer}" class="btn btn-success">Ofrecer Servicio</a>
+							</div>
+						</div>
+					</div>
+				</div>
 	</header>
 
 	<!-- Footer -->
