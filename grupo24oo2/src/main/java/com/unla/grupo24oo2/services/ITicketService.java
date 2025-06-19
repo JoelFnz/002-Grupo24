@@ -16,4 +16,6 @@ public interface ITicketService {
 	Page<TicketResponseDTO> obtenerTicketsPorFiltro(TicketFilterDTO filter, int dniCliente , Pageable pageable);
 	
 	Page<TicketResponseDTO> obtenerTicketsPorNroEmpleado(String nroEmpleado, Pageable pageable);
+	
+	TicketResponseDTO obtenerTicketPorNroTicket(String nroTicket);
 }

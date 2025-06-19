@@ -63,7 +63,7 @@
 	<!-- Scripts -->
 	<script>
 		document.getElementById("cancelarCambio").addEventListener("click", () => {
-			window.location.href = "/clientes/seguridad"; // Ajustado para seguridad general
+			window.history.back(); // Ajustado para seguridad general
 		});
 
 		document.getElementById("formCambiarContrasenia").addEventListener("submit", (event) => {
@@ -114,6 +114,7 @@
 				.catch(error => console.error("Error:", error));
 		});
 	</script>
+
 
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

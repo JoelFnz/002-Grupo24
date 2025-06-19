@@ -2,6 +2,8 @@ package com.unla.grupo24oo2.services.implementation;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.unla.grupo24oo2.dtos.IntervencionDTO;
@@ -55,6 +57,17 @@ public class IntervencionService implements IIntervencionService{
 		}
 		
 		return intervencion;
+	}
+
+	@Override
+	public Page<IntervencionDTO> obtenerIntervencionesPorNroTicket(String nroTicket, Pageable pageable) {
+		Page<Intervencion> intervenciones = intervencionRepository.findByNroTicket(nroTicket, pageable);
+		
+		return intervenciones.map(intervencion -> {
+			IntervencionDTO dto = modelMapper.map(intervencion, IntervencionDTO.class);
+			dto.setNombreEmpleado(intervencion.getEmpleado().getNombre());
+			return dto;
+		});
 	}
 
 }

@@ -98,4 +98,15 @@ public class TicketService implements ITicketService {
 	    });
 	}
 
+	@Override
+	public TicketResponseDTO obtenerTicketPorNroTicket(String nroTicket) {
+		Ticket ticket = ticketRepository.findByNroTicket(nroTicket)
+				.orElseThrow(() -> new NoRegisterFoundException("Ticket no encontrado"));
+		
+		TicketResponseDTO dto = modelMapper.map(ticket, TicketResponseDTO.class);
+		dto.setEstado(ticket.getEstado().getEstado().toString());
+		
+		return dto;
+	}
+
 }

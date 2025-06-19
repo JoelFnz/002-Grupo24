@@ -46,12 +46,23 @@
 					<span th:errors="*{descripcion}">Descripción inválida</span>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-primary">Crear Intervención</button>
+			
+			<div class="mt-4 text-center">
+				<button type="submit" class="btn btn-primary">Crear Intervención</button>
+			</div>
+			
 			<div th:if="${mensaje}" class="alert alert-danger" role="alert">
 				<p th:text="${mensaje}"></p>
 			</div>
 		</form>
 	</div>
+
+	<div class="mt-4 text-center">
+		<button class="btn btn-secondary" onclick="window.history.back()">
+			Volver Atrás
+		</button>
+	</div>
+
 </body>
 
 </html>

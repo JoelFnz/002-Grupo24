@@ -61,10 +61,14 @@
 		<div class="mt-4">
 			<a class="btn btn-primary" th:href="@{/ticket/crear/{dni}(dni=${ticketResponse.dniCliente})}">Crear otro
 				Ticket</a>
-			<a class="btn btn-secondary" th:href="@{/ticket/historial(dniCliente=${ticketResponse.dniCliente})}">Volver
+			<a class="btn btn-secondary" th:href="@{/ticket/historial(dniCliente=${ticketResponse.dniCliente})}">Ir
 				al historial</a>
+			<a class="btn btn-secondary" onclick="window.history.back()">Volver Atrás</a>
 		</div>
+
+
 	</div>
+
 </body>
 
 </html>

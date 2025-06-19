@@ -25,9 +25,11 @@ import com.unla.grupo24oo2.dtos.TicketResponseDTO;
 import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Ticket;
+import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
 import com.unla.grupo24oo2.helpers.ViewRouterHelper;
 import com.unla.grupo24oo2.services.IClienteService;
 import com.unla.grupo24oo2.services.IEmpleadoService;
+import com.unla.grupo24oo2.services.IIntervencionService;
 import com.unla.grupo24oo2.services.IServicioService;
 import com.unla.grupo24oo2.services.ITicketService;
 
@@ -48,6 +50,9 @@ public class TicketController {
 	
 	@Autowired
 	private IClienteService clienteService;
+	
+	@Autowired
+	private IIntervencionService intervencionService;
 
 	
 	@GetMapping("/crear/{dni}")
@@ -139,6 +144,21 @@ public class TicketController {
 		 mV.addObject("nroEmpleado", nroEmpleado);
 		 mV.addObject("tickets", tickets);
 
+		 return mV;
+	 }
+	 
+	 @GetMapping("/detalle")
+	 public ModelAndView mostrarDetalleTicket(
+			 @RequestParam(required = true) int dniCliente,
+			 @RequestParam(required = true) String nroTicket,
+			 Pageable pageable) {
+		 ModelAndView mV = new ModelAndView(ViewRouterHelper.DETALLE_TICKET);
+		 
+		 TicketResponseDTO ticket = ticketService.obtenerTicketPorNroTicket(nroTicket); 
+		 
+		 mV.addObject("ticket", ticket);
+		 mV.addObject("intervenciones", intervencionService.obtenerIntervencionesPorNroTicket(nroTicket, pageable));
+		 
 		 return mV;
 	 }
 }
