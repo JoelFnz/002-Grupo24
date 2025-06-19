@@ -63,7 +63,7 @@
 							<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}"></td>
 							<td><span class="badge bg-info" th:text="${ticket.estado}">ASIGNADO</span></td>
 							<td>
-								<a th:href="@{/intervencion/crear(nroEmpleado=${nroEmpleado}, nroTicket=${ticket.nroTicket})}" class="btn btn-sm btn-outline-primary me-1">Intervenir</a>
+								<a th:href="@{/intervencion/crear(dniEmpleado=${dniEmpleado}, nroTicket=${ticket.nroTicket})}" class="btn btn-sm btn-outline-primary me-1">Intervenir</a>
 								<a th:href="@{/ticket/finalizar(nroTicket=${ticket.nroTicket}, dniEmpleado=${dniEmpleado})}" class="btn btn-sm btn-outline-danger">Finalizar</a>
 							</td>
 						</tr>

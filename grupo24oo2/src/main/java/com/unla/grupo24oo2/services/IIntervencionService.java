@@ -9,4 +9,6 @@ public interface IIntervencionService {
 	IntervencionDTO crearIntervencion(IntervencionDTO intervencion);
 	
 	Page<IntervencionDTO> obtenerIntervencionesPorNroTicket(String nroTicket, Pageable pageable);
+	
+	String obtenerNroEmpleadoPorDni(int dniEmpleado);
 }

@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.services.implementation;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,8 @@ import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.repositories.IIntervencionRepository;
 import com.unla.grupo24oo2.repositories.ITicketRepository;
 import com.unla.grupo24oo2.services.IIntervencionService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class IntervencionService implements IIntervencionService{
@@ -69,5 +73,13 @@ public class IntervencionService implements IIntervencionService{
 			return dto;
 		});
 	}
-
+	
+    public String obtenerNroEmpleadoPorDni(int dniEmpleado) {
+        Optional<Empleado> empleadoOpt = empleadoRepository.findByDni(dniEmpleado);
+        if (empleadoOpt.isPresent()) {
+            return empleadoOpt.get().getNroEmpleado();
+        } else {
+            throw new EntityNotFoundException("Empleado con DNI " + dniEmpleado + " no encontrado");
+        }
+    }
 }

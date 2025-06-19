@@ -21,4 +21,6 @@ public class IntervencionDTO {
 	private String nroTicket;
 	
 	private String nombreEmpleado;
+	
+	private int dniEmpleado;
 }

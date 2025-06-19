@@ -32,18 +32,21 @@ public class IntervencionController {
 	
 	@GetMapping("/crear")
 	public ModelAndView mostrarFormularioIntervencion(
-			@RequestParam(required = true) String nroEmpleado,
-			@RequestParam(required = true) String nroTicket
-			) {
-		ModelAndView mV = new ModelAndView(ViewRouterHelper.FORMULARIO_INTERVENCION);
-		
-		IntervencionDTO intervencion = new IntervencionDTO();
-		intervencion.setNroEmpleado(nroEmpleado);
-		intervencion.setNroTicket(nroTicket);
-		
-		mV.addObject("intervencion", intervencion);
-		return mV;
+	        @RequestParam(required = true) int dniEmpleado,
+	        @RequestParam(required = true) String nroTicket
+	) {
+	    ModelAndView mV = new ModelAndView(ViewRouterHelper.FORMULARIO_INTERVENCION);
+
+	    String nroEmpleado = intervencionService.obtenerNroEmpleadoPorDni(dniEmpleado);
+	    
+	    IntervencionDTO intervencion = new IntervencionDTO();
+	    intervencion.setNroEmpleado(nroEmpleado);
+	    intervencion.setNroTicket(nroTicket);
+
+	    mV.addObject("intervencion", intervencion);
+	    return mV;
 	}
+
 	
 	@PostMapping("/crear")
 	public ModelAndView crearIntervencion(
