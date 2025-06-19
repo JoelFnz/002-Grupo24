@@ -30,56 +30,101 @@
 		</div>
 	</nav>
 
-	<div class="container">
-		<h2>Tickets Asociados</h2>
+	<div class="container my-5">
 
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Número de Ticket</th>
-					<th>Fecha de Creación</th>
-					<th>Estado</th>
-					<th>Acciones</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="ticket : ${tickets.content}">
-					<td th:text="${ticket.nroTicket}"></td>
-					<td th:text="${ticket.fechaYHoraDeCreacion}"></td>
-					<td th:text="${ticket.estado}"></td>
-					<td>
-						<a th:href="@{/intervencion/crear(nroEmpleado=${nroEmpleado}, nroTicket=${ticket.nroTicket})}"
-							class="btn btn-primary">Intervención</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<!-- 1. Tickets Asociados -->
+		<h2 class="mb-4">Tickets Asociados</h2>
 
-		<div>
-			<nav>
-				<ul class="pagination">
-					<li class="page-item" th:class="${tickets.hasPrevious() ? '' : 'disabled'}">
-						<a class="page-link"
-							th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number - 1})}">Anterior</a>
-					</li>
-					<li class="page-item" th:each="i : ${#numbers.sequence(0, tickets.totalPages - 1)}"
-						th:class="${i == tickets.number ? 'active' : ''}">
-						<a class="page-link" th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${i})}"
-							th:text="${i + 1}"></a>
-					</li>
-					<li class="page-item" th:class="${tickets.hasNext() ? '' : 'disabled'}">
-						<a class="page-link"
-							th:href="@{/ticket/asociados(nroEmpleado=${nroEmpleado}, page=${tickets.number + 1})}">Siguiente</a>
-					</li>
-				</ul>
-			</nav>
+		<div style="max-height: 400px; overflow-y: auto;">
+			<table class="table table-striped table-hover" th:if="${!#lists.isEmpty(ticketsAsociados)}">
+				<thead class="table-light">
+					<tr>
+						<th># Ticket</th>
+						<th>Servicio</th>
+						<th>Fecha</th>
+						<th>Estado</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ticket : ${ticketsAsociados}">
+						<td th:text="${ticket.nroTicket}"></td>
+						<td th:text="${ticket.nombreServicio}">--</td>
+						<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}">--</td>
+						<td><span class="badge bg-info" th:text="${ticket.estado}">ASIGNADO</span></td>
+						<td class="d-flex gap-2">
+							<a th:href="@{/intervencion/crear(nroEmpleado=${nroEmpleado}, nroTicket=${ticket.nroTicket})}"
+								class="btn btn-outline-primary btn-sm">Intervenir</a>
+							<a th:href="@{/ticket/finalizar(nroTicket=${ticket.nroTicket}, dniEmpleado=${dniEmpleado})}"
+								class="btn btn-outline-danger btn-sm">Finalizar</a>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
-	</div>
 
-	<div class="mt-4 text-center">
-		<button class="btn btn-secondary" onclick="window.history.back()">
-			<i class="bi bi-arrow-left"></i> Volver Atrás
-		</button>
+		<hr class="my-5" />
+
+		<!-- 2. Tickets activos del sistema -->
+		<h2>Tickets Activos del Sistema</h2>
+		<div style="max-height: 400px; overflow-y: auto;">
+			<table class="table table-hover" th:if="${!#lists.isEmpty(ticketsActivos)}">
+				<thead class="table-light">
+					<tr>
+						<th># Ticket</th>
+						<th>Servicio</th>
+						<th>Fecha</th>
+						<th>Estado</th>
+						<th>Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ticket : ${ticketsActivos}">
+						<td th:text="${ticket.nroTicket}"></td>
+						<td th:text="${ticket.nombreServicio}"></td>
+						<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}">--</td>
+						<td><span class="badge bg-primary" th:text="${ticket.estado}"></span></td>
+						<td>
+							<a th:href="@{/ticket/asignar(nroTicket=${ticket.nroTicket}, dniEmpleado=${dniEmpleado})}"
+								class="btn btn-outline-success btn-sm">Asignarme</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<hr class="my-5" />
+
+		<!-- 3. Historial de Tickets Finalizados -->
+		<h2>Historial de Tickets Finalizados</h2>
+		<div style="max-height: 400px; overflow-y: auto;">
+			<table class="table table-bordered" th:if="${!#lists.isEmpty(ticketsFinalizados)}">
+				<thead class="table-light">
+					<tr>
+						<th># Ticket</th>
+						<th>Servicio</th>
+						<th>Fecha</th>
+						<th>Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ticket : ${ticketsFinalizados}">
+						<td th:text="${ticket.nroTicket}"></td>
+						<td th:text="${ticket.nombreServicio}"></td>
+						<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}">--</td>
+						<td><span class="badge bg-secondary" th:text="${ticket.estado}"></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<hr class="my-5" />
+		<div class="mt-4 text-center">
+			<button class="btn btn-secondary" onclick="window.history.back()">
+				Volver Atrás
+			</button>
+		</div>
+
 	</div>
 
 </body>

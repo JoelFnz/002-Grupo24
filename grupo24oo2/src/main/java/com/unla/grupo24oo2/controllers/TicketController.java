@@ -46,9 +46,6 @@ public class TicketController {
 	private IServicioService servicioService; 
 	
 	@Autowired
-	private IEmpleadoService empleadoService;
-	
-	@Autowired
 	private IClienteService clienteService;
 	
 	@Autowired
@@ -97,10 +94,6 @@ public class TicketController {
 	        @RequestParam(required = false) String nroTicket,
 	        Pageable pageable){
 		
-		Empleado e = empleadoService.traerEmpleadoPorDni(dniCliente);
-		if(e != null) {
-			return redirigirAMostrarTicketsAsociados(e, pageable);
-		}
 	    
 	    TicketFilterDTO filter = new TicketFilterDTO();
 	    filter.setFechaCreacion(fechaCreacion);
@@ -121,31 +114,6 @@ public class TicketController {
 	    return mV; 
 	}
 	
-	//TODO: Deuda tecnica. Cambiar esto por algo mejor.
-	private ModelAndView redirigirAMostrarTicketsAsociados(Empleado e, Pageable pageable) {
-		ModelAndView mV = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
-
-		 Page<TicketResponseDTO> tickets = ticketService.obtenerTicketsPorNroEmpleado(e.getNroEmpleado(), pageable);
-		 
-		 mV.addObject("nroEmpleado", e.getNroEmpleado());
-		 mV.addObject("tickets", tickets);
-
-		 return mV;
-	}
-	
-	 @GetMapping("/asociados")
-	 public ModelAndView mostrarTicketsAsociados(
-			 @RequestParam(required = true) String nroEmpleado,
-			 @PageableDefault(size = 5) Pageable pageable) {
-		 ModelAndView mV = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
-
-		 Page<TicketResponseDTO> tickets = ticketService.obtenerTicketsPorNroEmpleado(nroEmpleado, pageable);
-		 
-		 mV.addObject("nroEmpleado", nroEmpleado);
-		 mV.addObject("tickets", tickets);
-
-		 return mV;
-	 }
 	 
 	 @GetMapping("/detalle")
 	 public ModelAndView mostrarDetalleTicket(
@@ -161,4 +129,39 @@ public class TicketController {
 		 
 		 return mV;
 	 }
+	 
+	 @GetMapping("/asociados")
+	 public ModelAndView mostrarTicketsAsociados(@RequestParam int dniEmpleado) {
+	     ModelAndView mv = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
+
+	     // 1. Tickets asociados al empleado
+	     List<TicketResponseDTO> ticketsAsociados = ticketService.obtenerTicketsAsignados(dniEmpleado);
+
+	     // 2. Tickets activos del sistema (estado INICIADO)
+	     List<TicketResponseDTO> ticketsActivos = ticketService.obtenerTicketsActivos();
+
+	     // 3. Historial de tickets finalizados del empleado
+	     List<TicketResponseDTO> ticketsFinalizados = ticketService.obtenerTicketsFinalizados(dniEmpleado);
+
+	     mv.addObject("dniEmpleado", dniEmpleado);
+	     mv.addObject("ticketsAsociados", ticketsAsociados);
+	     mv.addObject("ticketsActivos", ticketsActivos);
+	     mv.addObject("ticketsFinalizados", ticketsFinalizados);
+
+	     return mv;
+	 }
+
+	 @GetMapping("/asignar")
+	 public String asignarTicket(@RequestParam String nroTicket, @RequestParam int dniEmpleado) {
+	     ticketService.asignarTicketAEmpleado(nroTicket, dniEmpleado);
+	     return "redirect:/ticket/asociados?dniEmpleado=" + dniEmpleado;
+	 }
+
+	 @GetMapping("/finalizar")
+	 public String finalizarTicket(@RequestParam String nroTicket, @RequestParam int dniEmpleado) {
+	     ticketService.finalizarTicket(nroTicket);
+	     return "redirect:/ticket/asociados?dniEmpleado=" + dniEmpleado;
+	 }
+
+	 
 }
