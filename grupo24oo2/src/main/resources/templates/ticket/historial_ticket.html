@@ -51,15 +51,15 @@
 	<div class="container mt-4">
 		<!-- Mensaje de éxito o error de baja -->
 		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
-		    <i class="bi bi-check-circle-fill me-1"></i>
-		    <span th:text="${exito}"></span>
-		    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+			<i class="bi bi-check-circle-fill me-1"></i>
+			<span th:text="${exito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
 		</div>
 
 		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-		    <i class="bi bi-x-octagon-fill me-1"></i>
-		    <span th:text="${error}"></span>
-		    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+			<i class="bi bi-x-octagon-fill me-1"></i>
+			<span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
 		</div>
 
 		<h1 class="mb-4">Historial de Tickets</h1>
@@ -80,16 +80,19 @@
 							<input type="text" class="form-control" id="nroTicket" name="nroTicket"
 								th:value="${filter.nroTicket}" placeholder="Ej: TKT-123">
 						</div>
+
 						<div class="col-md-4">
-							<label for="fechaCreacion" class="form-label">Desde Fecha de Creación</label>
-							<input type="datetime-local" class="form-control" id="fechaCreacion" name="fechaCreacion"
-								th:value="${fechaCreacionFormatted}">
+							<label for="hastaFechaCreacion" class="form-label">Desde Fecha de Creacion</label>
+							<input type="datetime-local" class="form-control" id="hastaFechaCreacion"
+								name="hastaFechaCreacion" th:value="${hastaFechaFormatted}">
 						</div>
+
 						<div class="col-md-4">
-							<label for="fechaCaducidad" class="form-label">Hasta Fecha de Caducidad</label>
-							<input type="datetime-local" class="form-control" id="fechaCaducidad" name="fechaCaducidad"
-								th:value="${fechaCaducidadFormatted}">
+							<label for="desdeFechaCreacion" class="form-label">Hasta Fecha de Creación</label>
+							<input type="datetime-local" class="form-control" id="desdeFechaCreacion"
+								name="desdeFechaCreacion" th:value="${desdeFechaFormatted}">
 						</div>
+
 						<div class="col-12">
 							<button type="submit" class="btn btn-primary me-2">
 								<i class="bi bi-funnel"></i> Aplicar Filtros
@@ -128,10 +131,13 @@
 									</a>
 								</td>
 								<td th:text="${ticket.estado}"></td>
-								<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}"></td>
-								<td th:text="${#temporals.format(ticket.fechaYHoraDeCaducidad, 'dd/MM/yyyy HH:mm')}"></td>
+								<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}">
+								</td>
+								<td th:text="${#temporals.format(ticket.fechaYHoraDeCaducidad, 'dd/MM/yyyy HH:mm')}">
+								</td>
 								<td>
-									<a th:href="@{/ticket/detalle(nroTicket=${ticket.nroTicket}, dniCliente=${dni})}" class="btn btn-primary">
+									<a th:href="@{/ticket/detalle(nroTicket=${ticket.nroTicket}, dniCliente=${dni})}"
+										class="btn btn-primary">
 										<i class="bi bi-eye"></i> Ver
 									</a>
 								</td>
@@ -139,7 +145,8 @@
 							<tr th:if="${tickets.content.isEmpty()}">
 								<td colspan="5" class="text-center py-4">
 									<i class="bi bi-exclamation-circle fs-4 text-muted"></i>
-									<p class="mt-2 mb-0 text-muted">No se encontraron tickets con los filtros actuales</p>
+									<p class="mt-2 mb-0 text-muted">No se encontraron tickets con los filtros actuales
+									</p>
 								</td>
 							</tr>
 						</tbody>
@@ -155,8 +162,8 @@
                                             page=${tickets.number - 1}, 
                                             size=${tickets.size},
                                             nroTicket=${filter.nroTicket},
-                                            fechaCreacion=${fechaCreacionFormatted},
-                                            fechaCaducidad=${fechaCaducidadFormatted})}">
+                                            desdeFechaCreacion=${desdeFechaFormatted},
+                                            hastaFechaCreacion=${hastaFechaFormatted})}">
 									&laquo; Anterior
 								</a>
 							</li>
@@ -168,16 +175,16 @@
                                             page=${pageNum}, 
                                             size=${tickets.size},
                                             nroTicket=${filter.nroTicket},
-                                            fechaCreacion=${fechaCreacionFormatted},
-                                            fechaCaducidad=${fechaCaducidadFormatted})}" th:text="${pageNum + 1}"></a>
+                                            desdeFechaCreacion=${desdeFechaFormatted},
+                                            hastaFechaCreacion=${hastaFechaFormatted})}" th:text="${pageNum + 1}"></a>
 							</li>
 							<li class="page-item" th:classappend="${!tickets.hasNext()} ? 'disabled'">
 								<a class="page-link" th:href="@{/ticket/historial(dniCliente=${dni}, 
                                             page=${tickets.number + 1}, 
                                             size=${tickets.size},
                                             nroTicket=${filter.nroTicket},
-                                            fechaCreacion=${fechaCreacionFormatted},
-                                            fechaCaducidad=${fechaCaducidadFormatted})}">
+                                            desdeFechaCreacion=${desdeFechaFormatted},
+                                            hastaFechaCreacion=${hastaFechaFormatted})}">
 									Siguiente &raquo;
 								</a>
 							</li>
@@ -195,8 +202,8 @@
                                               page=0, 
                                               size=${size},
                                               nroTicket=${filter.nroTicket},
-                                              fechaCreacion=${fechaCreacionFormatted},
-                                              fechaCaducidad=${fechaCaducidadFormatted})}" th:text="${size}"></a></li>
+                                              desdeFechaCreacion=${desdeFechaFormatted},
+                                              hastaFechaCreacion=${hastaFechaFormatted})}" th:text="${size}"></a></li>
 							</ul>
 						</div>
 					</div>
@@ -213,10 +220,10 @@
                 <i class="bi bi-house-door"></i> Volver al inicio
             </a>
 			-->
-			<a class="btn btn-secondary" onclick="window.history.back()">Volver Atrás</a>
+			<a class="btn btn-secondary" th:href="@{/}">Volver atrás</a>
 		</div>
 	</div>
-	
+
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="/js/mantener_filtros.js"></script>

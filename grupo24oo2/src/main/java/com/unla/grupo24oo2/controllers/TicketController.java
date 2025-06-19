@@ -90,15 +90,15 @@ public class TicketController {
 	@GetMapping("/historial")
 	public ModelAndView obtenerHistorial(
 	        @RequestParam(required = true) int dniCliente,
-	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fechaCreacion,
-	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fechaCaducidad,
+	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime desdeFechaCreacion,
+	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime hastaFechaCreacion,
 	        @RequestParam(required = false) String nroTicket,
 	        Pageable pageable){
 		
 	    
 	    TicketFilterDTO filter = new TicketFilterDTO();
-	    filter.setFechaCreacion(fechaCreacion);
-	    filter.setFechaCaducidad(fechaCaducidad);
+	    filter.setHastaFechaCreacion(hastaFechaCreacion);
+	    filter.setDesdeFechaCreacion(desdeFechaCreacion);
 	    filter.setNroTicket(nroTicket);
 
 	    ModelAndView mV = new ModelAndView(ViewRouterHelper.HISTORIAL_TICKET);
@@ -107,10 +107,10 @@ public class TicketController {
 	    mV.addObject("tickets", tickets);
 	    mV.addObject("filter", filter); 
 	    mV.addObject("dni", dniCliente);
-	    mV.addObject("fechaCreacionFormatted", fechaCreacion != null ? 
-	            fechaCreacion.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
-	    mV.addObject("fechaCaducidadFormatted", fechaCaducidad != null ? 
-	            fechaCaducidad.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
+	    mV.addObject("desdeFechaFormatted", desdeFechaCreacion != null ? 
+	            desdeFechaCreacion.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
+	    mV.addObject("hastaFechaFormatted", hastaFechaCreacion != null ? 
+	            hastaFechaCreacion.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
 
 	    return mV; 
 	}

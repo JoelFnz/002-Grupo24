@@ -12,7 +12,7 @@ import com.unla.grupo24oo2.entities.Administrador;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.entities.Usuario;
-import com.unla.grupo24oo2.exceptions.NoRegisterFoundException;
+import com.unla.grupo24oo2.exceptions.NoRecordFoundException;
 import com.unla.grupo24oo2.repositories.IUsuarioRepository;
 import com.unla.grupo24oo2.services.IUsuarioService;
 
@@ -97,8 +97,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Override
 	public Administrador traerAdministradorPorDni(int dni){
 		try {
-			return usuarioRepository.findByDni(dni).orElseThrow(() -> new NoRegisterFoundException("El Administrador no existe"));
-		} catch (NoRegisterFoundException e) {
+			return usuarioRepository.findByDni(dni).orElseThrow(() -> new NoRecordFoundException("El Administrador no existe"));
+		} catch (NoRecordFoundException e) {
 			//e.printStackTrace();
 			return null;
 		}

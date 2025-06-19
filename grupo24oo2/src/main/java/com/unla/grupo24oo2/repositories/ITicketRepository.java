@@ -28,10 +28,10 @@ public interface ITicketRepository  extends JpaRepository<Ticket, Long>{
 	public Page<Ticket> findByClienteAndFechaYHoraDeCreacion(Cliente cliente, LocalDateTime fechaYHoraDeCreacion, Pageable pageable);
 
 	@Query("SELECT t FROM Ticket t WHERE " +
-			"(:#{#filter.fechaCreacion} IS NULL OR t.fechaYHoraDeCreacion >= :#{#filter.fechaCreacion}) " +
-			"AND (:#{#filter.fechaCaducidad} IS NULL OR t.fechaYHoraDeCaducidad <= :#{#filter.fechaCaducidad}) " +
-			"AND (:#{#filter.nroTicket} IS NULL OR t.nroTicket LIKE %:#{#filter.nroTicket}%) " +
-			"AND t.cliente = :cliente")
+	        "(:#{#filter.desdeFechaCreacion} IS NULL OR t.fechaYHoraDeCreacion >= :#{#filter.desdeFechaCreacion}) " +
+	        "AND (:#{#filter.hastaFechaCreacion} IS NULL OR t.fechaYHoraDeCreacion < :#{#filter.hastaFechaCreacion}) " +  
+	        "AND (:#{#filter.nroTicket} IS NULL OR t.nroTicket LIKE %:#{#filter.nroTicket}%) " +
+	        "AND t.cliente = :cliente")
 	Page<Ticket> findByClienteAndFilter(@Param("cliente") Cliente cliente, 
 			@Param("filter") TicketFilterDTO filter, 
 			Pageable pageable);

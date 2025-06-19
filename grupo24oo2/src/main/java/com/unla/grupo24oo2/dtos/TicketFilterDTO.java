@@ -10,8 +10,8 @@ import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
 public class TicketFilterDTO {
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaCaducidad;
+    private LocalDateTime desdeFechaCreacion;
+    private LocalDateTime hastaFechaCreacion;
     //private TipoDeEstado estado;
     private String nroTicket;
 }
