@@ -30,6 +30,9 @@
 			</div>
 			<div class="card-body">
 
+				<!-- Mensaje de error visible si hay DNI duplicado u otro -->
+				<div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
+
 				<form th:action="@{/clientes/registro}" method="post" th:object="${cliente}">
 
 					<!-- DNI -->
