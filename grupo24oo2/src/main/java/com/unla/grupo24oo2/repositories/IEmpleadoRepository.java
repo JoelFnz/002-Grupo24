@@ -14,5 +14,6 @@ public interface IEmpleadoRepository extends JpaRepository<Empleado, Long> {
     
     @Query("SELECT e.nroEmpleado FROM Empleado e ORDER BY e.idUsuario DESC LIMIT 1")
     String findUltimoNroEmpleado();
+    boolean existsByContactoEmail(String email);
 
 }

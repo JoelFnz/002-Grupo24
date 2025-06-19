@@ -3,7 +3,6 @@ package com.unla.grupo24oo2.services;
 import java.util.List;
 
 import com.unla.grupo24oo2.dtos.EmpleadoRegistroDTO;
-import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
 
 public interface IEmpleadoService {
@@ -19,4 +18,5 @@ public interface IEmpleadoService {
     // Nuevo método para eliminar empleados
     void eliminar(Empleado empleado);
 
+    Empleado traerEmpleadoPorNro(String nroEmpleado);
 }

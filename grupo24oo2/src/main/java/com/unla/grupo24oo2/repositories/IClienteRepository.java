@@ -9,4 +9,5 @@ public interface IClienteRepository extends JpaRepository<Cliente, Long> {
 	// Metodo personalizado para buscar un cliente por DNI
     Optional<Cliente> findByDni(int dni); // El uso de Optional permite manejar el caso en que no se encuentre un cliente con ese DNI
     Optional<Cliente> findByContactoEmail(String email);
+    boolean existsByContactoEmail(String email);
 }

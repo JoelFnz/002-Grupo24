@@ -10,7 +10,11 @@ import com.unla.grupo24oo2.dtos.EmpleadoRegistroDTO;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
 import com.unla.grupo24oo2.entities.Empleado;
+import com.unla.grupo24oo2.exceptions.DniEmpleadoDuplicadoException;
+import com.unla.grupo24oo2.exceptions.EmailClienteDuplicadoException;
+import com.unla.grupo24oo2.exceptions.EmailEmpleadoDuplicadoException;
 import com.unla.grupo24oo2.exceptions.NoRegisterFoundException;
+import com.unla.grupo24oo2.repositories.IClienteRepository;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.services.IEmpleadoService;
 
@@ -23,12 +27,21 @@ public class EmpleadoService implements IEmpleadoService {
     private IEmpleadoRepository empleadoRepository;
     
     @Autowired
+    private IClienteRepository clienteRepository;
+    
+    @Autowired
     private PasswordEncoder passwordEncoder;	//<-- Agregado
 
     public Empleado registrarEmpleado(EmpleadoRegistroDTO dto) {
         if (empleadoRepository.findByDni(dto.getDni()).isPresent()) {
-            throw new RuntimeException("Ya existe un empleado con ese DNI.");
+        	throw new DniEmpleadoDuplicadoException("El DNI ya está registrado como empleado.");
         }
+        if (empleadoRepository.existsByContactoEmail(dto.getEmail())) {
+            throw new EmailEmpleadoDuplicadoException("El email ingresado ya está registrado como empleado.");
+        }
+        if (clienteRepository.existsByContactoEmail(dto.getEmail())) {
+    	    throw new EmailEmpleadoDuplicadoException("El email ingresado ya está registrado como cliente.");
+    	}
         
         // Obtener el ultimo número de empleado registrado
         String ultimoNroEmpleado = empleadoRepository.findUltimoNroEmpleado();
@@ -82,5 +95,9 @@ public class EmpleadoService implements IEmpleadoService {
         return empleadoRepository.save(empleado); // Guarda el empleado actualizado en la base de datos
     }
 
+    @Override
+    public Empleado traerEmpleadoPorNro(String nroEmpleado) {
+        return empleadoRepository.findByNroEmpleado(nroEmpleado).orElse(null);
+    }
 	
 }

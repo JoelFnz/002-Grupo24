@@ -10,8 +10,13 @@ import com.unla.grupo24oo2.dtos.ClienteRegistroDTO;
 import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Contacto;
 import com.unla.grupo24oo2.entities.Domicilio;
+import com.unla.grupo24oo2.exceptions.DniClienteDuplicadoException;
+import com.unla.grupo24oo2.exceptions.EmailClienteDuplicadoException;
+import com.unla.grupo24oo2.exceptions.EmailEmpleadoDuplicadoException;
 import com.unla.grupo24oo2.repositories.IClienteRepository;
+import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.repositories.ITicketRepository;
+import com.unla.grupo24oo2.repositories.IUsuarioRepository;
 import com.unla.grupo24oo2.services.IClienteService;
 
 import jakarta.transaction.Transactional;
@@ -23,14 +28,24 @@ public class ClienteService implements IClienteService{
     private IClienteRepository clienteRepository;
     
     @Autowired
+    private IEmpleadoRepository empleadoRepository;
+    
+    @Autowired
     private ITicketRepository ticketRepository;
     
     @Autowired
     private PasswordEncoder passwordEncoder;	//<-- Agregado
+    
 
     public Cliente registrarCliente(ClienteRegistroDTO dto) {
-        if (clienteRepository.findByDni(dto.getDni()).isPresent()) {
-            throw new RuntimeException("Ya existe un cliente con ese DNI.");
+    	if (clienteRepository.findByDni(dto.getDni()).isPresent()) {
+    		throw new DniClienteDuplicadoException("El DNI ya está registrado como cliente.");
+    	}
+    	if (clienteRepository.existsByContactoEmail(dto.getEmail())) {
+    	    throw new EmailClienteDuplicadoException("El email ingresado ya está registrado como cliente.");
+    	}
+    	if (empleadoRepository.existsByContactoEmail(dto.getEmail())) {
+            throw new EmailClienteDuplicadoException("El email ingresado ya está registrado como empleado.");
         }
 
         // Crear Domicilio
