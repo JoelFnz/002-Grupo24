@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.unla.grupo24oo2.dtos.TicketDTO;
 import com.unla.grupo24oo2.dtos.TicketFilterDTO;
@@ -128,6 +129,20 @@ public class TicketController {
 		 mV.addObject("intervenciones", intervencionService.obtenerIntervencionesPorNroTicket(nroTicket, pageable));
 		 
 		 return mV;
+	 }
+	 
+	 @PostMapping("/darBaja")
+	 public String darDeBajaTicket(@RequestParam String nroTicket,
+	                               @RequestParam int dniCliente,
+	                               RedirectAttributes redirectAttributes) {
+	     try {
+	         ticketService.finalizarTicket(nroTicket);
+	         redirectAttributes.addFlashAttribute("exito", "El ticket fue dado de baja correctamente.");
+	     } catch (RuntimeException e) {
+	         redirectAttributes.addFlashAttribute("error", "No se pudo dar de baja el ticket: " + e.getMessage());
+	     }
+
+	     return "redirect:/ticket/historial?dniCliente=" + dniCliente;
 	 }
 	 
 	 @GetMapping("/asociados")

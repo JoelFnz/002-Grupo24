@@ -47,6 +47,19 @@
 	</nav>
 
 	<div class="container mt-4">
+		<!-- Mensaje de éxito o error de baja -->
+		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+		    <i class="bi bi-check-circle-fill me-1"></i>
+		    <span th:text="${exito}"></span>
+		    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+		    <i class="bi bi-x-octagon-fill me-1"></i>
+		    <span th:text="${error}"></span>
+		    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
 		<h1 class="mb-4">Historial de Tickets</h1>
 
 		<div class="card mb-4">
