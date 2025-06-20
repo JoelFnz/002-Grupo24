@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.unla.grupo24oo2.dtos.ServicioDTO;
 import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Servicio;
+import com.unla.grupo24oo2.exceptions.ServicioYaAsignadoException;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
 import com.unla.grupo24oo2.repositories.IServicioRepository;
 import com.unla.grupo24oo2.services.IServicioService;
@@ -53,15 +54,14 @@ public class ServicioService implements IServicioService{
 	    Servicio servicio = servicioRepository.findByNombreServicio(nombreServicio)
 	        .orElseThrow(() -> new RuntimeException("Servicio no encontrado: " + nombreServicio));
 
-	    // Si el empleado ya está asociado, no hacemos nada
 	    if (servicio.getEmpleados().contains(empleado)) {
-	        System.out.println("Usted ya esta asociado al servicio.");
-	        return;
+	        throw new ServicioYaAsignadoException("Ya estás asociado al servicio: " + nombreServicio);
 	    }
 
 	    servicio.getEmpleados().add(empleado);
 	    servicioRepository.save(servicio);
 	}
+
 	
 	@Override
 	public List<ServicioDTO> traerServiciosAsignados(int dniEmpleado) {

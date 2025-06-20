@@ -42,4 +42,10 @@ public class GlobalExceptionHandler {
 	    mV.addObject("empleado", new EmpleadoRegistroDTO());
 	    return mV;
 	}
+	
+	@ExceptionHandler(ServicioYaAsignadoException.class)
+	public ModelAndView manejarServicioYaAsignado(ServicioYaAsignadoException ex) {
+	    return new ModelAndView("redirect:/servicio/ofrecer?mensaje=" + ex.getMessage().replace(" ", "%20"));
+	}
+
 }
