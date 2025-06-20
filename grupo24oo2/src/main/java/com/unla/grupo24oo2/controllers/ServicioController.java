@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,49 +23,64 @@ public class ServicioController {
     private IServicioService servicioService;
 
     @GetMapping("/ofrecer")
-    public String mostrarFormularioOfrecer(Model model, @RequestParam(value = "mensaje", required = false) String mensaje) {
+    public ModelAndView mostrarFormularioOfrecer(@RequestParam(value = "mensaje", required = false) String mensaje) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
         int dniEmpleado = userDetails.getDni();
 
+        ModelAndView modelAndView = new ModelAndView("servicio/ofrecer_servicio");
+
         ServicioDTO dto = new ServicioDTO();
         dto.setDniEmpleado(dniEmpleado);
-        model.addAttribute("servicioDTO", dto);
-        
-        model.addAttribute("nuevoServicio", new ServicioDTO());
+        modelAndView.addObject("servicioDTO", dto);
+
+        modelAndView.addObject("nuevoServicio", new ServicioDTO());
 
         List<ServicioDTO> serviciosAsignados = servicioService.traerServiciosAsignados(dniEmpleado);
-        model.addAttribute("serviciosAsignados", serviciosAsignados);
+        modelAndView.addObject("serviciosAsignados", serviciosAsignados);
 
         List<ServicioDTO> servicios = servicioService.traerTodosLosServicios();
-        model.addAttribute("listaServicios", servicios != null ? servicios : new ArrayList<>());
+        modelAndView.addObject("listaServicios", servicios != null ? servicios : new ArrayList<>());
 
         if (mensaje != null) {
-            model.addAttribute("mensaje", mensaje);
+            modelAndView.addObject("mensaje", mensaje);
         }
-        
 
-        return "servicio/ofrecer_servicio";
+        return modelAndView;
     }
+
 
     @PostMapping("/ofrecer")
-    public String procesarOferta(@ModelAttribute("servicioDTO") ServicioDTO dto, Model model) {
+    public ModelAndView procesarOferta(@ModelAttribute("servicioDTO") ServicioDTO dto) {
         boolean yaAsociado = servicioService.estaAsociado(dto.getDniEmpleado(), dto.getNombreServicio());
 
-        if (yaAsociado) {
-            String mensaje = "Ya estas asociado a ese servicio.";
-            return "redirect:/servicio/ofrecer?mensaje=" + mensaje.replace(" ", "%20");
+        String mensaje = yaAsociado
+            ? "Ya estas asociado a ese servicio."
+            : "Servicio asignado correctamente";
+
+        if (!yaAsociado) {
+            servicioService.vincularPorNombre(dto.getDniEmpleado(), dto.getNombreServicio());
         }
 
-        servicioService.vincularPorNombre(dto.getDniEmpleado(), dto.getNombreServicio());
-        return "redirect:/servicio/ofrecer?mensaje=Servicio%20asignado%20correctamente";
+        return new ModelAndView("redirect:/servicio/ofrecer?mensaje=" + mensaje.replace(" ", "%20"));
     }
+
     
     
     @PostMapping("/crear")
-    public String crearNuevoServicio(@ModelAttribute("nuevoServicio") ServicioDTO dto, Model model) {
+    public ModelAndView crearNuevoServicio(@ModelAttribute("nuevoServicio") ServicioDTO dto) {
         servicioService.crearServicio(dto);
-        return "redirect:/servicio/ofrecer?mensaje=Servicio%20creado%20correctamente";
+        return new ModelAndView("redirect:/servicio/ofrecer?mensaje=Servicio%20creado%20correctamente");
+    }
+
+    @PostMapping("/desvincular")
+    public ModelAndView desvincularServicio(@RequestParam("dniEmpleado") int dniEmpleado,
+                                            @RequestParam("nombreServicio") String nombreServicio) {
+
+        servicioService.desvincularPorNombre(dniEmpleado, nombreServicio);
+        String mensaje = "Servicio eliminado de tus asignaciones";
+
+        return new ModelAndView("redirect:/servicio/ofrecer?mensaje=" + mensaje.replace(" ", "%20"));
     }
 
 }

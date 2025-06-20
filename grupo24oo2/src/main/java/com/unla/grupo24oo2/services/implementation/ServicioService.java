@@ -84,7 +84,23 @@ public class ServicioService implements IServicioService{
 	    return servicio.getEmpleados().contains(empleado);
 	}
 
+	@Override
+	public void desvincularPorNombre(int dniEmpleado, String nombreServicio) {
+	    Empleado empleado = empleadoRepository.findByDni(dniEmpleado)
+	        .orElseThrow(() -> new RuntimeException("Empleado no encontrado: " + dniEmpleado));
 
+	    Servicio servicio = servicioRepository.findByNombreServicio(nombreServicio)
+	        .orElseThrow(() -> new RuntimeException("Servicio no encontrado: " + nombreServicio));
+
+	    // Si el empleado está asociado, lo removemos
+	    if (servicio.getEmpleados().contains(empleado)) {
+	        servicio.getEmpleados().remove(empleado);
+	        servicioRepository.save(servicio);
+	        System.out.println("Empleado desvinculado correctamente del servicio.");
+	    } else {
+	        System.out.println("El empleado no estaba asociado a ese servicio.");
+	    }
+	}
 
 
 

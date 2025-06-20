@@ -10,6 +10,6 @@ public interface IServicioService {
 	void vincularPorNombre(int dniEmpleado, String nombreServicio);
 	void crearServicio(ServicioDTO dto);
 	boolean estaAsociado(int dniEmpleado, String nombreServicio);
-
+	void desvincularPorNombre(int dniEmpleado, String nombreServicio);
 }
 
