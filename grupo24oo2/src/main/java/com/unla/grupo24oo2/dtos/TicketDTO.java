@@ -13,4 +13,6 @@ public class TicketDTO {
 	
 	@Min(value = 1, message = "El número de dni debe ser válido.")
 	private int dniCliente;
+	
+	private String emailCliente; // <-- Nuevo campo
 }

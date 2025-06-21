@@ -19,4 +19,8 @@ public class IntervencionDTO {
 	@NotNull
 	@Size(min=1, max=300)
 	private String nroTicket;
+	
+	private String nombreEmpleado;
+	
+	private int dniEmpleado;
 }

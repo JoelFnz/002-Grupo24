@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,5 +30,7 @@ public class Contacto {
 	@OneToOne
 	@MapsId
 	@JoinColumn(name="idContacto", referencedColumnName="idUsuario", nullable=false)
+	@JsonIgnore // Evita la recursión infinita
+
 	private Usuario usuario;
 }

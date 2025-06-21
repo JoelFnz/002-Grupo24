@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Eliminar Cuenta - Sistema de Tickets</title>
+
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid justify-content-between">
+			<a class="navbar-brand" href="#">Sistema de Tickets</a>
+			<div class="d-flex align-items-center gap-3">
+				<span class="text-white">
+					<span th:text="${session.rolUsuario} ?: 'Invitado'"></span>
+					: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+				</span>
+				<a th:href="${session.rolUsuario == 'ADMIN' ? '/admin/home' : '/'}" class="btn btn-outline-light">
+					<i class="bi bi-house-door"></i> Página principal
+				</a>
+				<form th:action="@{/logout}" method="post" class="m-0">
+					<button type="submit" class="btn btn-danger">
+						<i class="bi bi-box-arrow-right"></i> Cerrar sesión
+					</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Contenido -->
+	<div class="container py-5">
+		<h1 class="mb-4 text-center text-danger">Eliminar Cuenta</h1>
+
+		<div class="card shadow p-4 mx-auto" style="max-width: 450px;">
+			<h5 class="text-center text-warning">⚠️ Advertencia</h5>
+			<p class="text-center">
+				Esta acción eliminará permanentemente tu cuenta y todos tus datos asociados.
+				No podrás recuperarlos después. ¿Estás seguro de continuar?
+			</p>
+
+			<div class="text-center mt-4">
+				<button id="confirmarEliminar" class="btn btn-danger">Eliminar Cuenta</button>
+				<button id="cancelarEliminar" class="btn btn-secondary">Cancelar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="py-4 bg-dark text-white-50 text-center">
+		<div class="container">
+			<small>© 2025 Sistema de Tickets - UNLa</small>
+		</div>
+	</footer>
+
+	<!-- Scripts -->
+	<script>
+		document.getElementById("cancelarEliminar").addEventListener("click", () => {
+			window.location.href = "/clientes/seguridad"; // Ajustado para seguridad general
+		});
+
+		document.getElementById("confirmarEliminar").addEventListener("click", () => {
+			const dniUsuario = Number("[[${session.dniCliente}]]");  // Obtener el DNI del usuario
+			const tipoUsuario = "[[${session.rolUsuario}]]"; // Obtener el tipo de usuario (ADMIN, CLIENTE, EMPLEADO)
+
+			if (!dniUsuario || isNaN(dniUsuario)) {
+				console.error("DNI no válido:", dniUsuario);
+				alert("Error: No se pudo obtener el DNI.");
+				return;
+			}
+
+			if (!confirm(`¿Estás seguro de que quieres eliminar tu cuenta como ${tipoUsuario}? Esta acción es irreversible.`)) {
+				return;
+			}
+
+			// Mapeo de roles a los endpoints correctos
+			const tipoUsuarioMap = {
+				"CLIENTE": "clientes",
+				"EMPLEADO": "empleados",
+				"ADMIN": "administrador"
+			};
+
+			let tipoPath = tipoUsuarioMap[tipoUsuario]; // Obtener el path correcto
+
+			if (!tipoPath) {
+				console.error("Tipo de usuario desconocido:", tipoUsuario);
+				alert("Error: No se pudo determinar el tipo de usuario.");
+				return;
+			}
+
+			let url = `/api/${tipoPath}/eliminar/${dniUsuario}`;
+
+			fetch(url, {method: "DELETE"})
+				.then(response => response.ok ? response.text() : Promise.reject("Error al eliminar la cuenta"))
+				.then(mensaje => {
+					alert(mensaje); // Mensaje de éxito
+					window.location.href = "/logout"; // Cierra sesión tras la eliminación
+				})
+				.catch(error => console.error("Error:", error));
+		});
+	</script>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

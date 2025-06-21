@@ -37,7 +37,8 @@ public class SecurityConfiguration {
             System.out.println("Configurando autorización de rutas");
             authz
                 // Rutas públicas (sin login)
-                .requestMatchers("/", "/login", "/clientes/registro","/empleados/registro", "/recuperar-contrasenia", "/restablecer-contrasenia", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/login", "/clientes/registro","/empleados/registro", "/recuperar-contrasenia", "/restablecer-contrasenia", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/api/clientes/**", "/servicio/**").authenticated()
                 .anyRequest().authenticated(); // Protege el resto de las rutas
                 //anyRequest().permitAll();
         })
@@ -51,8 +52,9 @@ public class SecurityConfiguration {
                     .loginProcessingUrl("/perform_login")			// Ruta que Spring intercepta para procesar el login
                     .usernameParameter("email")
                     .passwordParameter("contrasenia")
-                    .successHandler(new CustomSuccessHandler())		// Usamos el manejador en lugar de defaultSuccessUrl
-                    //.defaultSuccessUrl("/tickets/historial", true)	// Pagina a la que redirige tras login exitoso
+                    //.successHandler(new CustomSuccessHandler())		// Usamos el manejador en lugar de defaultSuccessUrl
+                    .successHandler(new CustomSuccessHandler()) //  Agregar el nuevo manejador de éxito
+                    //.defaultSuccessUrl("/", true)	// Pagina a la que redirige tras login exitoso
                     .permitAll();
             })
             .logout(logout -> {

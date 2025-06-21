@@ -13,5 +13,6 @@ public class EmpleadoRegistroDTO {
     private String telefono;
     private String email;
     private String calle;
+    private String localidad;
     private int numero;
 }

@@ -1,5 +1,7 @@
 package com.unla.grupo24oo2.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -18,13 +20,13 @@ public class Domicilio {
 	@Id
 	@Setter(AccessLevel.PROTECTED)
 	private long idDomicilio;
-	
 	private String calle;
-	
 	private String localidad;
 	
 	@OneToOne
 	@MapsId
 	@JoinColumn(name="idDomicilio", referencedColumnName="idUsuario", nullable=false)
+	@JsonIgnore // Evita la recursión infinita
+
 	private Usuario usuario;
 }

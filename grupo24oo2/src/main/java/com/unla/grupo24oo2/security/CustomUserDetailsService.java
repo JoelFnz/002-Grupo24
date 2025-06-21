@@ -8,10 +8,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.unla.grupo24oo2.entities.Administrador;
 import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
+import com.unla.grupo24oo2.entities.Usuario;
 import com.unla.grupo24oo2.repositories.IClienteRepository;
 import com.unla.grupo24oo2.repositories.IEmpleadoRepository;
+import com.unla.grupo24oo2.repositories.IUsuarioRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -22,6 +25,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private IEmpleadoRepository empleadoRepository;
+    
+    @Autowired
+    private IUsuarioRepository administradorRepository;
     
     // Este metodo se llama automaticamente cuando Spring Security necesita cargar un usuario por su email (username)
     @Override
@@ -40,6 +46,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (cliente.isPresent()) {
             System.out.println("Cliente encontrado: " + cliente.get().getContacto().getEmail());
             return new CustomUserDetails(cliente.get(), "CLIENTE");
+        }
+        
+        // Buscar en administradores usando findByEmail()
+        Usuario usuario = administradorRepository.findByEmail(email);
+        if (usuario != null && usuario instanceof Administrador) { // Validar si es un Administrador
+            System.out.println("Administrador encontrado: " + usuario.getContacto().getEmail());
+            return new CustomUserDetails(usuario, "ADMINISTRADOR");
         }
 
         // Si no se encontro ningún usuario

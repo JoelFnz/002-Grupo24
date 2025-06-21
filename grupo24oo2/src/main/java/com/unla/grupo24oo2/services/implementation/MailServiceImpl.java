@@ -18,7 +18,7 @@ public class MailServiceImpl implements IMailService {
         mensaje.setTo(destinatario);
         mensaje.setSubject(asunto);
         mensaje.setText(cuerpo);
-        mensaje.setFrom("noreply@tuapp.com"); // Puedes cambiar esto
+        mensaje.setFrom("noreply@tuapp.com");
 
         mailSender.send(mensaje);
     }

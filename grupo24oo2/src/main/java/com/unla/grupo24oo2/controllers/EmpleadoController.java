@@ -26,8 +26,25 @@ public class EmpleadoController {
     @PostMapping("/registro")
     public ModelAndView procesarFormulario(@ModelAttribute("empleado") EmpleadoRegistroDTO dto) {
         empleadoService.registrarEmpleado(dto);
-        ModelAndView mAV = new ModelAndView(ViewRouterHelper.REGISTRO_EXITOSO);
+        ModelAndView mAV = new ModelAndView(ViewRouterHelper.REGISTRO_EXITOSO_EMPLEADO);
         mAV.addObject("mensaje", "Empleado registrado exitosamente");
         return mAV;
+    }
+    
+    @GetMapping("/lista_empleados")
+    public String listarEmpleados() {
+        return (ViewRouterHelper.LISTA_EMPLEADOS);
+    }
+    
+    // Mostrar eliminar cuenta
+    @GetMapping("/eliminar_cuenta")
+    public String mostrarEliminarCuenta() {
+        return (ViewRouterHelper.ELIMINAR_CUENTA);
+    }
+    
+    // Mostrar cambiar contraseña
+    @GetMapping("/cambiar_contrasenia")
+    public String mostrarCambioContrasenia() {
+        return (ViewRouterHelper.CAMBIAR_CONTRASENIA);
     }
 }

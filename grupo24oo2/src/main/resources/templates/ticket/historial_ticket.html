@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Historial de Tickets</title>
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+	<style>
+		.table-responsive {
+			overflow-x: auto;
+		}
+
+		.pagination {
+			justify-content: center;
+		}
+
+		.active-page {
+			background-color: #0d6efd;
+			color: white !important;
+		}
+	</style>
+</head>
+
+<body class="bg-light">
+
+	<!-- Encabezado de navegacion -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid justify-content-between">
+			<a class="navbar-brand" href="#">Sistema de Tickets</a>
+			<div class="d-flex align-items-center gap-3">
+				<span class="text-white">
+					<span th:text="${session.rolUsuario} ?: 'Invitado'"></span>
+					: <span th:text="${session.emailCliente} ?: 'Invitado'"></span>
+				</span>
+				<a th:href="@{/}" class="btn btn-outline-light">
+					<i class="bi bi-house-door"></i> Página principal
+				</a>
+				<form th:action="@{/logout}" method="post" class="m-0">
+					<button type="submit" class="btn btn-danger">
+						<i class="bi bi-box-arrow-right"></i> Cerrar sesión
+					</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container mt-4">
+		<!-- Mensaje de éxito o error de baja -->
+		<div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+			<i class="bi bi-check-circle-fill me-1"></i>
+			<span th:text="${exito}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+			<i class="bi bi-x-octagon-fill me-1"></i>
+			<span th:text="${error}"></span>
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+		</div>
+
+		<h1 class="mb-4">Historial de Tickets</h1>
+
+		<div class="card mb-4">
+			<div class="card-header bg-primary text-white">
+				<h2 class="h5 mb-0">Filtros</h2>
+			</div>
+			<div class="card-body">
+				<form th:action="@{/ticket/historial}" method="get" id="filterForm">
+					<input type="hidden" name="dniCliente" th:value="${dni}" />
+					<input type="hidden" name="page" th:value="${tickets.number}" />
+					<input type="hidden" name="size" th:value="${tickets.size}" />
+
+					<div class="row g-3">
+						<div class="col-md-4">
+							<label for="nroTicket" class="form-label">Número de Ticket</label>
+							<input type="text" class="form-control" id="nroTicket" name="nroTicket"
+								th:value="${filter.nroTicket}" placeholder="Ej: TKT-123">
+						</div>
+
+						<div class="col-md-4">
+							<label for="hastaFechaCreacion" class="form-label">Hasta Fecha de Creacion</label>
+							<input type="datetime-local" class="form-control" id="hastaFechaCreacion"
+								name="hastaFechaCreacion" th:value="${hastaFechaFormatted}">
+						</div>
+
+						<div class="col-md-4">
+							<label for="desdeFechaCreacion" class="form-label">Desde Fecha de Creación</label>
+							<input type="datetime-local" class="form-control" id="desdeFechaCreacion"
+								name="desdeFechaCreacion" th:value="${desdeFechaFormatted}">
+						</div>
+
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary me-2">
+								<i class="bi bi-funnel"></i> Aplicar Filtros
+							</button>
+							<a th:href="@{/ticket/historial(dniCliente=${dni})}" class="btn btn-outline-secondary">
+								<i class="bi bi-x-circle"></i> Limpiar Filtros
+							</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+				<h2 class="h5 mb-0">Resultados</h2>
+				<span class="badge bg-light text-dark" th:text="'Total: ' + ${tickets.totalElements}"></span>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead class="table-light">
+							<tr>
+								<th>Número de Ticket</th>
+								<th>Estado</th>
+								<th>Fecha de Creación</th>
+								<th>Fecha de Caducidad</th>
+								<th>Detalle</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="ticket : ${tickets.content}">
+								<td>
+									<a>
+										<span th:text="${ticket.nroTicket}"></span>
+									</a>
+								</td>
+								<td th:text="${ticket.estado}"></td>
+								<td th:text="${#temporals.format(ticket.fechaYHoraDeCreacion, 'dd/MM/yyyy HH:mm')}">
+								</td>
+								<td th:text="${#temporals.format(ticket.fechaYHoraDeCaducidad, 'dd/MM/yyyy HH:mm')}">
+								</td>
+								<td>
+									<a th:href="@{/ticket/detalle(nroTicket=${ticket.nroTicket}, dniCliente=${dni})}"
+										class="btn btn-primary">
+										<i class="bi bi-eye"></i> Ver
+									</a>
+								</td>
+							</tr>
+							<tr th:if="${tickets.content.isEmpty()}">
+								<td colspan="5" class="text-center py-4">
+									<i class="bi bi-exclamation-circle fs-4 text-muted"></i>
+									<p class="mt-2 mb-0 text-muted">No se encontraron tickets con los filtros actuales
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- Paginación con filtros persistentes -->
+				<div th:if="${tickets.totalPages > 1}" class="mt-4">
+					<nav aria-label="Paginación">
+						<ul class="pagination">
+							<li class="page-item" th:classappend="${!tickets.hasPrevious()} ? 'disabled'">
+								<a class="page-link" th:href="@{/ticket/historial(dniCliente=${dni}, 
+                                            page=${tickets.number - 1}, 
+                                            size=${tickets.size},
+                                            nroTicket=${filter.nroTicket},
+                                            desdeFechaCreacion=${desdeFechaFormatted},
+                                            hastaFechaCreacion=${hastaFechaFormatted})}">
+									&laquo; Anterior
+								</a>
+							</li>
+							<li th:each="pageNum : ${#numbers.sequence(
+                                Math.max(0, tickets.number - 2),
+                                Math.min(tickets.totalPages - 1, tickets.number + 2))}" class="page-item"
+								th:classappend="${pageNum == tickets.number} ? 'active'">
+								<a class="page-link" th:href="@{/ticket/historial(dniCliente=${dni}, 
+                                            page=${pageNum}, 
+                                            size=${tickets.size},
+                                            nroTicket=${filter.nroTicket},
+                                            desdeFechaCreacion=${desdeFechaFormatted},
+                                            hastaFechaCreacion=${hastaFechaFormatted})}" th:text="${pageNum + 1}"></a>
+							</li>
+							<li class="page-item" th:classappend="${!tickets.hasNext()} ? 'disabled'">
+								<a class="page-link" th:href="@{/ticket/historial(dniCliente=${dni}, 
+                                            page=${tickets.number + 1}, 
+                                            size=${tickets.size},
+                                            nroTicket=${filter.nroTicket},
+                                            desdeFechaCreacion=${desdeFechaFormatted},
+                                            hastaFechaCreacion=${hastaFechaFormatted})}">
+									Siguiente &raquo;
+								</a>
+							</li>
+						</ul>
+					</nav>
+
+					<div class="d-flex justify-content-center mt-2">
+						<div class="dropdown">
+							<button class="btn btn-outline-secondary dropdown-toggle" type="button"
+								data-bs-toggle="dropdown" aria-expanded="false">
+								<span th:text="${tickets.size}"></span> por página
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item" th:each="size : ${[5, 10, 20, 50]}" th:href="@{/ticket/historial(dniCliente=${dni}, 
+                                              page=0, 
+                                              size=${size},
+                                              nroTicket=${filter.nroTicket},
+                                              desdeFechaCreacion=${desdeFechaFormatted},
+                                              hastaFechaCreacion=${hastaFechaFormatted})}" th:text="${size}"></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-4 text-center">
+			<a class="btn btn-success me-2" th:href="@{/ticket/crear/{dni}(dni=${dni})}">
+				<i class="bi bi-plus-circle"></i> Nuevo Ticket
+			</a>
+			<!--
+            <a class="btn btn-outline-secondary" th:href="@{/}">
+                <i class="bi bi-house-door"></i> Volver al inicio
+            </a>
+			-->
+			<a class="btn btn-secondary" th:href="@{/}">Volver atrás</a>
+		</div>
+	</div>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/mantener_filtros.js"></script>
+</body>
+
+</html>

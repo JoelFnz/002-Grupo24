@@ -14,29 +14,45 @@ import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Ticket;
+import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
 
 public interface ITicketRepository  extends JpaRepository<Ticket, Long>{
 	public Optional<Ticket> findByIdTicket(long idTicket);
-	
+
 	public Optional<Ticket> findByNroTicket(String nroTicket);
-	
+
 	public Optional<Ticket> findByCliente(Cliente cliente);
-	
+
 	public Page<Ticket> findByCliente(Cliente cliente, Pageable pageable);
-	
+
 	public Page<Ticket> findByClienteAndFechaYHoraDeCreacion(Cliente cliente, LocalDateTime fechaYHoraDeCreacion, Pageable pageable);
-	
+
 	@Query("SELECT t FROM Ticket t WHERE " +
-			"(:#{#filter.fechaCreacion} IS NULL OR t.fechaYHoraDeCreacion >= :#{#filter.fechaCreacion}) " +
-			"AND (:#{#filter.fechaCaducidad} IS NULL OR t.fechaYHoraDeCaducidad <= :#{#filter.fechaCaducidad}) " +
-			"AND (:#{#filter.nroTicket} IS NULL OR t.nroTicket LIKE %:#{#filter.nroTicket}%) " +
-			"AND t.cliente = :cliente")
+	        "(:#{#filter.desdeFechaCreacion} IS NULL OR t.fechaYHoraDeCreacion >= :#{#filter.desdeFechaCreacion}) " +
+	        "AND (:#{#filter.hastaFechaCreacion} IS NULL OR t.fechaYHoraDeCreacion < :#{#filter.hastaFechaCreacion}) " +  
+	        "AND (:#{#filter.nroTicket} IS NULL OR t.nroTicket LIKE %:#{#filter.nroTicket}%) " +
+	        "AND t.cliente = :cliente")
 	Page<Ticket> findByClienteAndFilter(@Param("cliente") Cliente cliente, 
 			@Param("filter") TicketFilterDTO filter, 
 			Pageable pageable);
-	
-	@Query("SELECT t FROM Ticket t JOIN t.empleadosAsignados e WHERE "
-			+ "e = :empleado "
-			+ "AND t.estado.estado != TipoDeEstado.FINALIZADO")
-	public Page<Ticket> findTicketAsociadosByEmpleado(@Param("empleado")Empleado empleado, Pageable pageable);
+
+	@Query("SELECT t FROM Ticket t JOIN t.empleadosAsignados e " +
+			"WHERE e = :empleado AND t.estado.estado = :estado")
+	List<Ticket> findTicketIntervenidosByEmpleado(@Param("empleado") Empleado empleado,
+			@Param("estado") TipoDeEstado estado);
+
+
+	// Nuevo metodo para eliminar tickets de un cliente
+	void deleteByCliente(Cliente cliente);
+
+
+	List<Ticket> findByEmpleadosAsignados_DniAndEstado_Estado(int dni, TipoDeEstado estado);
+
+	List<Ticket> findByEmpleadosAsignados_DniAndEstado_EstadoOrderByFechaYHoraDeCreacionDesc(
+			int dni,
+			TipoDeEstado estado
+			);
+
+	List<Ticket> findByEstado_Estado(TipoDeEstado estado);
+
 }

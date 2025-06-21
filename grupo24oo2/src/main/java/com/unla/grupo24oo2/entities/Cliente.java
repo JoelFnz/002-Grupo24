@@ -2,6 +2,7 @@ package com.unla.grupo24oo2.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unla.grupo24oo2.entities.enums.RoleType;
 
 import jakarta.persistence.Column;
@@ -21,6 +22,7 @@ public class Cliente extends Usuario{
 	private int dni;
 	
 	@OneToMany(mappedBy="cliente", fetch=FetchType.LAZY)
+	@JsonIgnore  // Evita la recursión infinita con Ticket
 	private List<Ticket> ticketsAsociados;
 	
 	public Cliente(int dni, String nombre, String contrasenia, Domicilio domicilio, Contacto contacto) {

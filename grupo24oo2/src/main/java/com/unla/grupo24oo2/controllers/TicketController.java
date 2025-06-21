@@ -18,16 +18,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.unla.grupo24oo2.dtos.TicketDTO;
 import com.unla.grupo24oo2.dtos.TicketFilterDTO;
 import com.unla.grupo24oo2.dtos.TicketResponseDTO;
+import com.unla.grupo24oo2.entities.Cliente;
 import com.unla.grupo24oo2.entities.Empleado;
 import com.unla.grupo24oo2.entities.Ticket;
+import com.unla.grupo24oo2.entities.enums.TipoDeEstado;
 import com.unla.grupo24oo2.helpers.ViewRouterHelper;
+import com.unla.grupo24oo2.services.IClienteService;
 import com.unla.grupo24oo2.services.IEmpleadoService;
+import com.unla.grupo24oo2.services.IIntervencionService;
 import com.unla.grupo24oo2.services.IServicioService;
 import com.unla.grupo24oo2.services.ITicketService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/ticket")
@@ -40,19 +47,32 @@ public class TicketController {
 	private IServicioService servicioService; 
 	
 	@Autowired
-	private IEmpleadoService empleadoService;
+	private IClienteService clienteService;
+	
+	@Autowired
+	private IIntervencionService intervencionService;
+
 	
 	@GetMapping("/crear/{dni}")
-	public ModelAndView mostrarFormularioTicket(@PathVariable("dni") int dniCliente, Model model) {
-		ModelAndView mV = new ModelAndView(ViewRouterHelper.FORMULARIO_TICKET);
-		
-		TicketDTO ticket = new TicketDTO();
-		ticket.setDniCliente(dniCliente);
-		
-		mV.addObject("ticket", ticket);
-		mV.addObject("servicios", servicioService.traerTodosLosServicios());
-		
-		return mV;
+	public ModelAndView mostrarFormularioTicket(@PathVariable("dni") int dniCliente, Model model, HttpSession session) {  // <- Parametro HttpSession agregado para la session
+	    ModelAndView mV = new ModelAndView(ViewRouterHelper.FORMULARIO_TICKET);
+	    
+	    Cliente cliente = clienteService.traerClientePorDni(dniCliente); //<-- Creo cliente para obtener el email y mostrarlo en la vista
+	    
+	    TicketDTO ticket = new TicketDTO();
+	    ticket.setDniCliente(dniCliente);
+
+	    if (cliente != null && cliente.getContacto() != null) {
+	        String email = cliente.getContacto().getEmail();
+	        session.setAttribute("emailCliente", email); //<-- Guardamos el email en la sesion
+	    } else {
+	        session.setAttribute("emailCliente", null);
+	    }
+
+	    mV.addObject("ticket", ticket);
+	    mV.addObject("servicios", servicioService.traerTodosLosServicios());
+	    
+	    return mV;
 	}
 	
 	@PostMapping("/crear")
@@ -70,19 +90,15 @@ public class TicketController {
 	@GetMapping("/historial")
 	public ModelAndView obtenerHistorial(
 	        @RequestParam(required = true) int dniCliente,
-	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fechaCreacion,
-	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime fechaCaducidad,
+	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime desdeFechaCreacion,
+	        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime hastaFechaCreacion,
 	        @RequestParam(required = false) String nroTicket,
 	        Pageable pageable){
 		
-		Empleado e = empleadoService.traerEmpleadoPorDni(dniCliente);
-		if(e != null) {
-			return redirigirAMostrarTicketsAsociados(e, pageable);
-		}
 	    
 	    TicketFilterDTO filter = new TicketFilterDTO();
-	    filter.setFechaCreacion(fechaCreacion);
-	    filter.setFechaCaducidad(fechaCaducidad);
+	    filter.setHastaFechaCreacion(hastaFechaCreacion);
+	    filter.setDesdeFechaCreacion(desdeFechaCreacion);
 	    filter.setNroTicket(nroTicket);
 
 	    ModelAndView mV = new ModelAndView(ViewRouterHelper.HISTORIAL_TICKET);
@@ -91,37 +107,76 @@ public class TicketController {
 	    mV.addObject("tickets", tickets);
 	    mV.addObject("filter", filter); 
 	    mV.addObject("dni", dniCliente);
-	    mV.addObject("fechaCreacionFormatted", fechaCreacion != null ? 
-	            fechaCreacion.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
-	    mV.addObject("fechaCaducidadFormatted", fechaCaducidad != null ? 
-	            fechaCaducidad.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
+	    mV.addObject("desdeFechaFormatted", desdeFechaCreacion != null ? 
+	            desdeFechaCreacion.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
+	    mV.addObject("hastaFechaFormatted", hastaFechaCreacion != null ? 
+	            hastaFechaCreacion.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")) : null);
 
 	    return mV; 
 	}
 	
-	//TODO: Deuda tecnica. Cambiar esto por algo mejor.
-	private ModelAndView redirigirAMostrarTicketsAsociados(Empleado e, Pageable pageable) {
-		ModelAndView mV = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
-
-		 Page<TicketResponseDTO> tickets = ticketService.obtenerTicketsPorNroEmpleado(e.getNroEmpleado(), pageable);
+	 
+	 @GetMapping("/detalle")
+	 public ModelAndView mostrarDetalleTicket(
+			 @RequestParam(required = true) int dniCliente,
+			 @RequestParam(required = true) String nroTicket,
+			 Pageable pageable) {
+		 ModelAndView mV = new ModelAndView(ViewRouterHelper.DETALLE_TICKET);
 		 
-		 mV.addObject("nroEmpleado", e.getNroEmpleado());
-		 mV.addObject("tickets", tickets);
-
-		 return mV;
-	}
-	
-	 @GetMapping("/asociados")
-	 public ModelAndView mostrarTicketsAsociados(
-			 @RequestParam(required = true) String nroEmpleado,
-			 @PageableDefault(size = 5) Pageable pageable) {
-		 ModelAndView mV = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
-
-		 Page<TicketResponseDTO> tickets = ticketService.obtenerTicketsPorNroEmpleado(nroEmpleado, pageable);
+		 TicketResponseDTO ticket = ticketService.obtenerTicketPorNroTicket(nroTicket); 
 		 
-		 mV.addObject("nroEmpleado", nroEmpleado);
-		 mV.addObject("tickets", tickets);
-
+		 mV.addObject("ticket", ticket);
+		 mV.addObject("intervenciones", intervencionService.obtenerIntervencionesPorNroTicket(nroTicket, pageable));
+		 
 		 return mV;
 	 }
+	 
+	 @PostMapping("/darBaja")
+	 public String darDeBajaTicket(@RequestParam String nroTicket,
+	                               @RequestParam int dniCliente,
+	                               RedirectAttributes redirectAttributes) {
+	     try {
+	         ticketService.finalizarTicket(nroTicket);
+	         redirectAttributes.addFlashAttribute("exito", "El ticket fue dado de baja correctamente.");
+	     } catch (RuntimeException e) {
+	         redirectAttributes.addFlashAttribute("error", "No se pudo dar de baja el ticket: " + e.getMessage());
+	     }
+
+	     return "redirect:/ticket/historial?dniCliente=" + dniCliente;
+	 }
+	 
+	 @GetMapping("/asociados")
+	 public ModelAndView mostrarTicketsAsociados(@RequestParam int dniEmpleado) {
+	     ModelAndView mv = new ModelAndView(ViewRouterHelper.ASOCIADOS_TICKET);
+
+	     // 1. Tickets asociados al empleado
+	     List<TicketResponseDTO> ticketsAsociados = ticketService.obtenerTicketsAsignados(dniEmpleado);
+
+	     // 2. Tickets activos del sistema (estado INICIADO)
+	     List<TicketResponseDTO> ticketsActivos = ticketService.obtenerTicketsActivos();
+
+	     // 3. Historial de tickets finalizados del empleado
+	     List<TicketResponseDTO> ticketsFinalizados = ticketService.obtenerTicketsFinalizados(dniEmpleado);
+
+	     mv.addObject("dniEmpleado", dniEmpleado);
+	     mv.addObject("ticketsAsociados", ticketsAsociados);
+	     mv.addObject("ticketsActivos", ticketsActivos);
+	     mv.addObject("ticketsFinalizados", ticketsFinalizados);
+
+	     return mv;
+	 }
+
+	 @GetMapping("/asignar")
+	 public String asignarTicket(@RequestParam String nroTicket, @RequestParam int dniEmpleado) {
+	     ticketService.asignarTicketAEmpleado(nroTicket, dniEmpleado);
+	     return "redirect:/ticket/asociados?dniEmpleado=" + dniEmpleado;
+	 }
+
+	 @GetMapping("/finalizar")
+	 public String finalizarTicket(@RequestParam String nroTicket, @RequestParam int dniEmpleado) {
+	     ticketService.finalizarTicket(nroTicket);
+	     return "redirect:/ticket/asociados?dniEmpleado=" + dniEmpleado;
+	 }
+
+	 
 }
