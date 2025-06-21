@@ -10,8 +10,8 @@ Pasos a seguir para levantar el proyecto:
   - DB_URL -> colocar la url de la base de datos.
   - USERNAME -> colocar tu usuario de la base de datos.
   - PASSWORD -> colocar tu password de la base de datos.
-  - EMAIL_USER -> oo2.grupo.024@gmail.com (Solo es utilizado por la aplicación para enviar mails).
-  - EMAIL_PASSWORD -> bwlb pmvk bnum nbmu
+  - EMAIL_USER -> colocar el valor indicado en el template.
+  - EMAIL_PASSWORD -> colocar el valor indicado en el template.
 - Ejecutar el proyecto para crear la base de datos.
 - Ejecutar el sql script 'hardcodear servicios'. Les va a permitir crear tickets sin haber creado servicos anteriormente.
 - Abrir el navegador e ir a la siguiente url: http://localhost:8080
